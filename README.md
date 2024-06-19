@@ -1,16 +1,12 @@
 
 <h1 align="center">EvoAgent: Towards Multi-Agent Generation via Evolutionary Algorithms</h1>
 
+## What's New
++  [2024.06.21] We release EvoAgent.
+   + The code and datasets are available at [evoagent](https://github.com/siyuyuan/evoagent).
+   + The paper is available at [EvoAgent: Towards Multi-Agent Generation via Evolutionary Algorithms](https://arxiv.org/abs/XXX).
 
-<p align="center">
-[<a href="https://evoagent.github.io/">Website</a>]
-[<a href="http://arxiv.org/abs">Paper</a>] 
-
-</p>
-
-
-
-# EvoAgent
+## EvoAgent
 
 EvoAgent is a generic method to automatically extend expert agents to multi-agent systems via the evolutionary algorithm. Specifically, to align human society, each agent can be considered as individuals that can procreate its population across successive generations. Motivated by this mechanism, we can simulate such a human behavior to automatically generate multiple agents based on any pre-defined agents.
 
