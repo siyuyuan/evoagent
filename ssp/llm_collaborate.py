@@ -1,4 +1,3 @@
-
 import sys
 from io import StringIO
 import openai
@@ -59,7 +58,7 @@ if __name__ == "__main__":
     azure = False
     with tqdm(total=total_files, desc="Processing files", initial=start_index) as pbar:
         for i, data in enumerate(test_data[start_index:], start=start_index):
-            
+
             if task_name == 'writing':
                 topic = data["topic"]
                 questions = '\n'.join(data["questions"])
@@ -70,7 +69,7 @@ if __name__ == "__main__":
                 prompt = data["code"]
 
             messages = message_construction(model_name, prompt)
-         
+
             if method == "collaborate":
                 clean_result = evaluator_construction(messages, model_name, prompt, data_type)
                 answer_list, answer = collaboration_func(args.ind, input_data, clean_result, model_name, data_type)
@@ -84,9 +83,6 @@ if __name__ == "__main__":
                 clean_result = evaluator_construction(messages, model_name, prompt, data_type)
                 answer = clean_result
                 answer_list = []
-
-
-            
 
             if task_name == 'writing':
                 data["final_answer"] = answer
@@ -109,12 +105,11 @@ if __name__ == "__main__":
                         score = data["multiple_choice_scores"][k]
                         break
                 data["final_score"] = score
-                
-            
+
             with open(progress_file.split('.')[0] + '.jsonl', 'a+', encoding='utf-8') as f:
                 line = json.dumps(data, ensure_ascii=False)
                 f.write(line + '\n')
 
             update_progress(progress_file, i + 1)
             pbar.update(1)
-            #break
+            # break

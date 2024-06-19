@@ -1,4 +1,3 @@
-
 import sys
 from io import StringIO
 import openai
@@ -36,6 +35,7 @@ from threading import Thread, Event
 import traceback
 from agent_prompt_code import *
 
+
 def message_construction(prompt, model_name):
     if model_name != 'gemini':
         messages = [
@@ -47,11 +47,11 @@ def message_construction(prompt, model_name):
         ]
     return messages
 
+
 def spy_refine_func(ind, question, answer, model_name, data_type):
     i = 0
     answer_list = []
     while i < ind:
-        
         prompt = spy_feedback_agent_prompt.format(question=question, answer=answer)
         messages = message_construction(prompt, model_name)
         feedback_description = evaluator_construction(messages, model_name, question, data_type)
@@ -62,50 +62,52 @@ def spy_refine_func(ind, question, answer, model_name, data_type):
 
         answer_list.append({
             "time": i,
-            "results":answer,
+            "results": answer,
             "refine": feedback_description,
             "new_results": new_answer
-                             })
-        #pdb.set_trace()
+        })
+        # pdb.set_trace()
         answer = new_answer
-        i = i+1
+        i = i + 1
 
     return answer_list, answer
+
 
 def guess_refine_func(ind, n, question, answer, model_name, data_type):
     i = 0
     answer_list = []
     while i < ind:
-        
         prompt = guess_feedback_agent_prompt.format(question=question, answer=answer)
         messages = message_construction(prompt, model_name)
         feedback_description = evaluator_construction(messages, model_name, question, data_type)
 
-        prompt = guess_self_refine_agent_prompt.format(question=question, answer=answer, feedback=feedback_description, n=n)
+        prompt = guess_self_refine_agent_prompt.format(question=question, answer=answer, feedback=feedback_description,
+                                                       n=n)
         messages = message_construction(prompt, model_name)
         new_answer = evaluator_construction(messages, model_name, question, data_type)
 
         answer_list.append({
             "time": i,
-            "results":answer,
+            "results": answer,
             "refine": feedback_description,
             "new_results": new_answer
-                             })
-        #pdb.set_trace()
+        })
+        # pdb.set_trace()
         answer = new_answer
-        i = i+1
+        i = i + 1
 
     return answer_list, answer
 
+
 def guess_collaboration_func(ind, n, question, answer, model_name, data_type):
-    
     i = 0
     answer_list = []
     description_ls = []
     while i < ind:
         flag = 0
 
-        prompt = guess_meta_agent_prompt.format(question=question, answer=answer, description='\n-'.join(description_ls))
+        prompt = guess_meta_agent_prompt.format(question=question, answer=answer,
+                                                description='\n-'.join(description_ls))
         messages = message_construction(prompt, model_name)
         description = evaluator_construction(messages, model_name, question, data_type)
         description_ls.append(description)
@@ -115,7 +117,7 @@ def guess_collaboration_func(ind, n, question, answer, model_name, data_type):
         sub_answer = evaluator_construction(messages, model_name, question, data_type)
 
         prompt = guess_refine_agent_prompt.format(question=question, description=description,
-                                             old_answer=answer, new_answer=sub_answer, n=n)
+                                                  old_answer=answer, new_answer=sub_answer, n=n)
         messages = message_construction(prompt, model_name)
         new_answer = evaluator_construction(messages, model_name, question, data_type)
 
@@ -125,15 +127,15 @@ def guess_collaboration_func(ind, n, question, answer, model_name, data_type):
             "description": description,
             "sub_answer": sub_answer,
             "new_results": new_answer
-                             })
+        })
 
         answer = new_answer
-        i = i+1
+        i = i + 1
 
     return answer_list, answer
 
+
 def spy_collaboration_func(ind, question, answer, model_name, data_type):
-    
     i = 0
     answer_list = []
     description_ls = []
@@ -150,7 +152,7 @@ def spy_collaboration_func(ind, question, answer, model_name, data_type):
         sub_answer = evaluator_construction(messages, model_name, question, data_type)
 
         prompt = spy_refine_agent_prompt.format(question=question, description=description,
-                                             old_answer=answer, new_answer=sub_answer)
+                                                old_answer=answer, new_answer=sub_answer)
         messages = message_construction(prompt, model_name)
         new_answer = evaluator_construction(messages, model_name, question, data_type)
 
@@ -160,10 +162,10 @@ def spy_collaboration_func(ind, question, answer, model_name, data_type):
             "description": description,
             "sub_answer": sub_answer,
             "new_results": new_answer
-                             })
+        })
 
         answer = new_answer
-        i = i+1
+        i = i + 1
 
     return answer_list, answer
 
@@ -181,7 +183,7 @@ if __name__ == "__main__":
     data_type = args.data_type
     method = args.method
     test_data = read_jsonline('data/codenames_collaborative/codenames_50.jsonl')
-    
+
     total_files = len(test_data)
     progress_file = f"result/codenames_collaborative_{model_name}_{method}.txt"
     start_index = get_last_processed_index(progress_file)
@@ -204,7 +206,7 @@ Answer:
                 messages = [
                     {"role": "user", "parts": [prompt]},
                 ]
-            
+
             if method == "collaborate":
                 clean_result = evaluator_construction(messages, model_name, prompt, data_type)
                 answer_list, answer = spy_collaboration_func(args.ind, prompt, clean_result, model_name, data_type)
@@ -219,7 +221,6 @@ Answer:
             data["spy_answer"] = answer
             data["spy_answer_list"] = answer_list
             data["hint_word"] = hint_word
-
 
             # For guesser
             word_list = data["word_list"]
@@ -237,7 +238,7 @@ Answer:
                 messages = [
                     {"role": "user", "parts": [prompt]},
                 ]
-            
+
             if method == "collaborate":
                 clean_result = evaluator_construction(messages, model_name, prompt, data_type)
                 answer_list, answer = guess_collaboration_func(args.ind, n, prompt, clean_result, model_name, data_type)
@@ -248,25 +249,25 @@ Answer:
                 clean_result = evaluator_construction(messages, model_name, prompt, data_type)
                 answer = clean_result
                 answer_list = []
-            
 
             target_words = data['target_words']
             target_words = [word.strip().lower() for word in target_words]
 
             predicted_words = answer.split("Final Answer:")[-1].split(",")
-            predicted_words = [word.strip().replace(".","").lower() for word in predicted_words]
-            
+            predicted_words = [word.strip().replace(".", "").lower() for word in predicted_words]
+
             # ground truth set
             target_words_set = set(target_words)
             # predicted set
             predicted_words_set = set(predicted_words)
-            
+
             common_words = predicted_words_set.intersection(target_words_set)
             common_words = list(common_words)
             data["guess_answer"] = answer
             data["guess_list"] = answer_list
-            data["info"] = {"matched_words":common_words, "matched_count":len(common_words), "target_count":len(target_words_set)}
-            
+            data["info"] = {"matched_words": common_words, "matched_count": len(common_words),
+                            "target_count": len(target_words_set)}
+
             with open(progress_file.split('.')[0] + '.jsonl', 'a+', encoding='utf-8') as f:
                 line = json.dumps(data, ensure_ascii=False)
                 f.write(line + '\n')

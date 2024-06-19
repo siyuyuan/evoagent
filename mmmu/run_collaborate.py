@@ -6,6 +6,7 @@ import json
 from agent_prompt import *
 import argparse
 
+
 def read_jsonline(address):
     not_mark = []
     with open(address, 'r', encoding="utf-8") as f:
@@ -13,6 +14,7 @@ def read_jsonline(address):
             jsonstr = json.loads(jsonstr)
             not_mark.append(jsonstr)
     return not_mark
+
 
 def get_last_processed_index(progress_file):
     """Retrieve the last processed index from the progress file."""
@@ -29,28 +31,30 @@ def update_progress(progress_file, index):
     with open(progress_file, 'w', encoding='utf-8') as f:
         f.write(str(index))
 
+
 def collaboration_func(ind, query, option, answer, model_name):
-    
     i = 0
     answer_list = []
     description_ls = []
     while i < ind:
         flag = 0
         while True:
-            prompt = meta_agent_prompt.format(query=query, option=option, answer=answer, description='\n-'.join(description_ls))
+            prompt = meta_agent_prompt.format(query=query, option=option, answer=answer,
+                                              description='\n-'.join(description_ls))
             description = llm_response(image, prompt, model_name)
-            check_prompt = check_agent_prompt.format(query=query, option=option, description=description, description_ls= '\n-'.join(description_ls))
+            check_prompt = check_agent_prompt.format(query=query, option=option, description=description,
+                                                     description_ls='\n-'.join(description_ls))
             check_result = llm_response(image, check_prompt)
             if 'discard' not in check_result.lower() or flag > 3:
                 description_ls.append(description)
                 break
             flag += 1
-        
+
         prompt = multi_agent_prompt.format(query=query, option=option, description=description)
         sub_answer = llm_response(image, prompt, model_name)
 
         prompt = refine_agent_prompt.format(query=query, option=option, description=description,
-                                             old_answer=answer, new_answer=sub_answer)
+                                            old_answer=answer, new_answer=sub_answer)
         new_answer = llm_response(image, prompt, model_name)
 
         answer_list.append({
@@ -59,12 +63,13 @@ def collaboration_func(ind, query, option, answer, model_name):
             "description": description,
             "sub_answer": sub_answer,
             "new_results": new_answer
-                             })
+        })
 
         answer = new_answer
-        i = i+1
+        i = i + 1
 
     return answer_list, answer
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -75,28 +80,28 @@ if __name__ == "__main__":
     args = parser.parse_args()
     model_name = args.model_name
     classes = [
-        'Accounting', 
-        'Agriculture', 
-        'Architecture_and_Engineering', 
+        'Accounting',
+        'Agriculture',
+        'Architecture_and_Engineering',
         'Art_Theory',
         'Art',
         'Basic_Medical_Science', 'Biology',
-        'Chemistry', 'Clinical_Medicine', 'Computer_Science', 
-        'Design', 'Diagnostics_and_Laboratory_Medicine', 
-        'Economics', 
-        'Electronics', 
-        'Energy_and_Power', 
-        'Finance', 
-        'Geography', 'History', 'Literature', 
-        'Manage', 
-        'Marketing', 'Materials', 'Math', 'Mechanical_Engineering', 
-        'Music', 
-        'Pharmacy', 
-        'Physics', 
-        'Psychology', 
-        'Public_Health', 
-        'Sociology', 
-        ]
+        'Chemistry', 'Clinical_Medicine', 'Computer_Science',
+        'Design', 'Diagnostics_and_Laboratory_Medicine',
+        'Economics',
+        'Electronics',
+        'Energy_and_Power',
+        'Finance',
+        'Geography', 'History', 'Literature',
+        'Manage',
+        'Marketing', 'Materials', 'Math', 'Mechanical_Engineering',
+        'Music',
+        'Pharmacy',
+        'Physics',
+        'Psychology',
+        'Public_Health',
+        'Sociology',
+    ]
 
     for cla in classes[args.start:args.end]:
         print(f"Class: {cla}")
@@ -118,7 +123,7 @@ if __name__ == "__main__":
                 dic.append(data["id"])
 
         with tqdm(total=total_files, desc="Processing files", initial=start_index) as pbar:
-            for i in range(start_index ,total_files):
+            for i in range(start_index, total_files):
                 data = sub_dataset_val[i]
 
                 if data["id"] in dic:
@@ -134,8 +139,10 @@ if __name__ == "__main__":
                 prompt = f'{question}\n{options}\nYou need to give reasons first and then give the answer with the format: "Answer:"'
                 answer = llm_response(image, prompt, model_name)
                 answer_list, answer = collaboration_func(ind, question, options, answer, model_name)
-                answer_final = {"id": data["id"], "topic_difficulty": data["topic_difficulty"], "subfield": data["subfield"],
-                                "question": data['question'], "options": data['options'], "golden_answer": data["answer"],
+                answer_final = {"id": data["id"], "topic_difficulty": data["topic_difficulty"],
+                                "subfield": data["subfield"],
+                                "question": data['question'], "options": data['options'],
+                                "golden_answer": data["answer"],
                                 "question_type": data["question_type"], "answer": answer, "answer_list": answer_list}
                 print(answer)
                 with open(f"{os.path.join(progress_file.split('.')[0])}.jsonl", 'a+', encoding='utf-8') as f:

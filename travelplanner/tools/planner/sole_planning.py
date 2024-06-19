@@ -4,7 +4,7 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.getcwd(), "../..")))
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
-#from agents.prompts import planner_agent_prompt, cot_planner_agent_prompt, react_planner_agent_prompt, \
+# from agents.prompts import planner_agent_prompt, cot_planner_agent_prompt, react_planner_agent_prompt, \
 #    react_reflect_planner_agent_prompt, reflect_prompt
 from agents.prompts import *
 from agents.persona_prompt import *
@@ -19,6 +19,7 @@ import openai
 import argparse
 from datasets import load_dataset
 import logging
+
 
 def load_line_json_data(filename):
     data = []
@@ -56,8 +57,8 @@ def catch_openai_api_error():
     else:
         print("API error:", error)
 
+
 def collaboration_func(ind, reference_information, query, planner_results):
-    
     i = 0
     planner_list = []
     description_ls = []
@@ -71,7 +72,7 @@ def collaboration_func(ind, reference_information, query, planner_results):
                 description_ls.append(description)
                 break
             flag += 1
-        
+
         multi_planner = Multi_Planner(model_name=args.model_name, agent_prompt=multi_planner_agent_prompt)
         sub_answer = multi_planner.run(reference_information, query, description)
 
@@ -80,25 +81,25 @@ def collaboration_func(ind, reference_information, query, planner_results):
 
         planner_list.append({
             "time": i,
-            "planner_results":planner_results,
+            "planner_results": planner_results,
             "description": description,
             "sub_answer": sub_answer,
             "new_planner_results": new_planner_results
-                             })
+        })
 
         planner_results = new_planner_results
 
-        i = i+1
+        i = i + 1
 
     return planner_list, planner_results
 
+
 def group_func(ind, group_num, select_strategy, reference_information, query, planner_results):
-    
     i = 0
     planner_list = []
     description_ls = []
     while i < ind:
-        
+
         group_answers = []
         for j in range(group_num):
             meta_planner = Meta_Planner(model_name=args.model_name, agent_prompt=meta_planner_agent_prompt)
@@ -127,17 +128,18 @@ def group_func(ind, group_num, select_strategy, reference_information, query, pl
             description = group_answers[0][0]
             sub_answer = group_answers[0][1]
             refine_planner = Refine_Planner(model_name=args.model_name, agent_prompt=refine_planner_agent_prompt)
-            new_planner_results = refine_planner.run(reference_information, query, planner_results, description, sub_answer)
+            new_planner_results = refine_planner.run(reference_information, query, planner_results, description,
+                                                     sub_answer)
         elif select_strategy == 'pk':
             pk_planner = PK_Planner(model_name=args.model_name, agent_prompt=pk_planner_agent_prompt)
             group_answers_prompt = ''
             num = 0
             for group_answer in group_answers:
                 group_answers_prompt += f"\nExpert #{num} Description: {group_answer[0]}\nTravel Plan{group_answer[1]}\n"
-                num = num+1
+                num = num + 1
             pk_answer = pk_planner.run(reference_information, query, len(group_answers), group_answers_prompt)
             try:
-                expert_num = int(pk_answer.split("#")[-1].replace(".","").strip()[0])
+                expert_num = int(pk_answer.split("#")[-1].replace(".", "").strip()[0])
             except:
                 temp = pk_answer.split("Final Answer:")[-1]
                 expert_num = 0
@@ -148,7 +150,8 @@ def group_func(ind, group_num, select_strategy, reference_information, query, pl
             description = group_answers[expert_num][0]
             sub_answer = group_answers[expert_num][1]
             refine_planner = Refine_Planner(model_name=args.model_name, agent_prompt=refine_planner_agent_prompt)
-            new_planner_results = refine_planner.run(reference_information, query, planner_results, description, sub_answer)
+            new_planner_results = refine_planner.run(reference_information, query, planner_results, description,
+                                                     sub_answer)
         elif select_strategy == 'all':
             all_planner = All_Planner(model_name=args.model_name, agent_prompt=all_planner_agent_prompt)
             sub_answer = ""
@@ -156,57 +159,52 @@ def group_func(ind, group_num, select_strategy, reference_information, query, pl
             num = 0
             for group_answer in group_answers:
                 group_answers_prompt += f"\nExpert {num} Description: {group_answer[0]}\nTravel Plan{group_answer[1]}\n"
-                num = num+1
-            new_planner_results = all_planner.run(reference_information, query, planner_results, group_answers_prompt, len(group_answers))
-
-        
+                num = num + 1
+            new_planner_results = all_planner.run(reference_information, query, planner_results, group_answers_prompt,
+                                                  len(group_answers))
 
         planner_list.append({
             "time": i,
-            "planner_results":planner_results,
+            "planner_results": planner_results,
             "description": description,
             "group_answers": group_answers,
             "sub_answer": sub_answer,
             "new_planner_results": new_planner_results
-                             })
+        })
 
         planner_results = new_planner_results
 
-        i = i+1
+        i = i + 1
 
     return planner_list, planner_results
 
 
-
-
-
 def refine_func(ind, reference_information, query, planner_results):
-    
     i = 0
     planner_list = []
     while i < ind:
-        
         feedback_planner = Feedback_Planner(model_name=args.model_name, agent_prompt=feedback_planner_agent_prompt)
         feedback_description = feedback_planner.run(reference_information, query, planner_results)
 
-        self_refine_planner = Self_Refine_Planner(model_name=args.model_name, agent_prompt=self_refine_planner_agent_prompt)
-        new_planner_results = self_refine_planner.run(reference_information, query, planner_results, feedback_description)
+        self_refine_planner = Self_Refine_Planner(model_name=args.model_name,
+                                                  agent_prompt=self_refine_planner_agent_prompt)
+        new_planner_results = self_refine_planner.run(reference_information, query, planner_results,
+                                                      feedback_description)
 
         planner_list.append({
             "time": i,
-            "planner_results":planner_results,
+            "planner_results": planner_results,
             "refine": feedback_description,
             "new_planner_results": new_planner_results
-                             })
-        #pdb.set_trace()
+        })
+        # pdb.set_trace()
         planner_results = new_planner_results
-        i = i+1
+        i = i + 1
 
     return planner_list, planner_results
 
 
 def overgen_func(ind, reference_information, query):
-    
     i = 0
     planner_list = []
     overgen_planner = Overgen_Planner(model_name=args.model_name, agent_prompt=overgen_planner_agent_prompt)
@@ -239,14 +237,15 @@ def ssp_func(ind, reference_information, query):
         {
             "persona": persona_ls,
             "suggest_inital": suggest_inital,
-            "planner_results":planner_results,
+            "planner_results": planner_results,
         }
     )
     i = 0
     while i < ind:
         suggest_temp = []
         for persona in persona_ls:
-            ssp_feedback_planner = SSP_Feedback_Planner(model_name=args.model_name, agent_prompt=ssp_feedback_planner_agent_prompt)
+            ssp_feedback_planner = SSP_Feedback_Planner(model_name=args.model_name,
+                                                        agent_prompt=ssp_feedback_planner_agent_prompt)
             ssp_feedback_description = ssp_feedback_planner.run(reference_information, query, planner_results, persona)
             if ssp_feedback_description == "Well Done!":
                 continue
@@ -254,29 +253,31 @@ def ssp_func(ind, reference_information, query):
                 suggest_temp.append(f"{persona.strip()}: {ssp_feedback_description.strip()}")
         if len(suggest_temp) == 0:
             break
-        ssp_self_refine_planner = SSP_Self_Refine_Planner(model_name=args.model_name, agent_prompt=ssp_self_refine_planner_agent_prompt)
-        new_planner_results = ssp_self_refine_planner.run(reference_information, query, planner_results, '\n'.join(suggest_temp))
+        ssp_self_refine_planner = SSP_Self_Refine_Planner(model_name=args.model_name,
+                                                          agent_prompt=ssp_self_refine_planner_agent_prompt)
+        new_planner_results = ssp_self_refine_planner.run(reference_information, query, planner_results,
+                                                          '\n'.join(suggest_temp))
 
         planner_list.append({
             "time": i,
-            "planner_results":planner_results,
+            "planner_results": planner_results,
             "refine": suggest_temp,
             "new_planner_results": new_planner_results
-                             })
-        #pdb.set_trace()
+        })
+        # pdb.set_trace()
         planner_results = new_planner_results
-        i = i+1
+        i = i + 1
 
     return planner_list, planner_results
 
+
 def prompt_refine_func(ind, reference_information, query, planner_results):
-    
     i = 0
     planner_list = []
     description_ls = []
     while i < ind:
-        
-        promptrefine_planner = PromptRefine_Planner(model_name=args.model_name, agent_prompt=promptrefine_planner_agent_prompt)
+        promptrefine_planner = PromptRefine_Planner(model_name=args.model_name,
+                                                    agent_prompt=promptrefine_planner_agent_prompt)
         feedback_description = promptrefine_planner.run(reference_information, query, planner_results)
 
         multi_planner = Multi_Planner(model_name=args.model_name, agent_prompt=multi_planner_agent_prompt)
@@ -284,19 +285,18 @@ def prompt_refine_func(ind, reference_information, query, planner_results):
 
         planner_list.append({
             "time": i,
-            "planner_results":planner_results,
+            "planner_results": planner_results,
             "refine": feedback_description,
             "new_planner_results": new_planner_results
-                             })
-        #pdb.set_trace()
+        })
+        # pdb.set_trace()
         planner_results = new_planner_results
-        i = i+1
+        i = i + 1
 
     return planner_list, planner_results
 
 
 def suggest_func(ind, reference_information, query, planner_results):
-    
     i = 0
     planner_list = []
     description_ls = []
@@ -307,22 +307,24 @@ def suggest_func(ind, reference_information, query, planner_results):
         suggest_planner = Suggest_Planner(model_name=args.model_name, agent_prompt=suggest_planner_agent_prompt)
         suggestion = suggest_planner.run(reference_information, query, planner_results, description)
 
-        self_refine_planner = Self_Refine_Planner(model_name=args.model_name, agent_prompt=self_refine_planner_agent_prompt)
+        self_refine_planner = Self_Refine_Planner(model_name=args.model_name,
+                                                  agent_prompt=self_refine_planner_agent_prompt)
         new_planner_results = self_refine_planner.run(reference_information, query, planner_results, suggestion)
 
         planner_list.append({
             "time": i,
-            "planner_results":planner_results,
+            "planner_results": planner_results,
             "description": description,
             "suggestion": suggestion,
             "new_planner_results": new_planner_results
-                             })
-        #pdb.set_trace()
+        })
+        # pdb.set_trace()
         planner_results = new_planner_results
-        i = i+1
+        i = i + 1
 
     return planner_list, planner_results
-    
+
+
 def read_jsonline(address):
     not_mark = []
     with open(address, 'r', encoding="utf-8") as f:
@@ -331,8 +333,8 @@ def read_jsonline(address):
             not_mark.append(jsonstr)
     return not_mark
 
-if __name__ == "__main__":
 
+if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--set_type", type=str, default="validation")
@@ -384,55 +386,60 @@ if __name__ == "__main__":
             else:
                 result = json.load(
                     open(os.path.join(f'{args.output_dir}/{args.set_type}/generated_plan_{number}.json')))
-            
+
             if args.rewrite == False:
                 if args.strategy in ['collaboration', 'refine', 'ssp', 'overgen', 'suggest', 'promptrefine']:
                     if f'{args.model_name}_{args.strategy}_{ind}_sole-planning_results' in result[-1]:
                         print(f"Do not write: {args.output_dir}/{args.set_type}/generated_plan_{number}.json")
-                        #import pdb
-                        #pdb.set_trace()
+                        # import pdb
+                        # pdb.set_trace()
                         continue
                 elif args.strategy in ['group']:
-                    if f'{args.model_name}_{args.strategy}_{args.ind}_{args.group_num}_{args.select_strategy}_sole-planning_results' in result[-1]:
+                    if f'{args.model_name}_{args.strategy}_{args.ind}_{args.group_num}_{args.select_strategy}_sole-planning_results' in \
+                            result[-1]:
                         print(f"Do not write: {args.output_dir}/{args.set_type}/generated_plan_{number}.json")
-                        #import pdb
-                        #pdb.set_trace()
+                        # import pdb
+                        # pdb.set_trace()
                         continue
                 else:
                     if f'{args.model_name}_{args.strategy}_sole-planning_results' in result[-1]:
                         print(f"Do not write: {args.output_dir}/{args.set_type}/generated_plan_{number}.json")
                         continue
 
-            
             query_data = query_data_list[number - 1]
             reference_information = query_data['reference_information']
-            #import pdb
-            #pdb.set_trace()
+            # import pdb
+            # pdb.set_trace()
             while True:
                 if args.strategy in ['react', 'reflexion']:
                     planner_results, scratchpad = planner.run(reference_information, query_data['query'])
                 elif args.strategy == 'collaboration':
                     ind = args.ind
                     refine_plan = planner.run(reference_information, query_data['query'])
-                    planner_list, planner_results = collaboration_func(ind, reference_information, query_data['query'], refine_plan)
+                    planner_list, planner_results = collaboration_func(ind, reference_information, query_data['query'],
+                                                                       refine_plan)
                 elif args.strategy == 'group':
                     ind = args.ind
                     group_num = args.group_num
                     select_strategy = args.select_strategy
                     refine_plan = planner.run(reference_information, query_data['query'])
-                    planner_list, planner_results = group_func(ind, group_num, select_strategy, reference_information, query_data['query'], refine_plan)
+                    planner_list, planner_results = group_func(ind, group_num, select_strategy, reference_information,
+                                                               query_data['query'], refine_plan)
                 elif args.strategy == 'refine':
                     ind = args.ind
                     refine_plan = planner.run(reference_information, query_data['query'])
-                    planner_list, planner_results = refine_func(ind, reference_information, query_data['query'], refine_plan)
+                    planner_list, planner_results = refine_func(ind, reference_information, query_data['query'],
+                                                                refine_plan)
                 elif args.strategy == 'promptrefine':
                     ind = args.ind
                     refine_plan = planner.run(reference_information, query_data['query'])
-                    planner_list, planner_results = prompt_refine_func(ind, reference_information, query_data['query'], refine_plan)
+                    planner_list, planner_results = prompt_refine_func(ind, reference_information, query_data['query'],
+                                                                       refine_plan)
                 elif args.strategy == 'suggest':
                     ind = args.ind
                     refine_plan = planner.run(reference_information, query_data['query'])
-                    planner_list, planner_results = suggest_func(ind, reference_information, query_data['query'], refine_plan)
+                    planner_list, planner_results = suggest_func(ind, reference_information, query_data['query'],
+                                                                 refine_plan)
                 elif args.strategy == 'ssp':
                     ind = args.ind
                     planner_list, planner_results = ssp_func(ind, reference_information, query_data['query'])
@@ -453,9 +460,10 @@ if __name__ == "__main__":
                 result[-1][f'{args.model_name}_{args.strategy}_{ind}_sole-planning_results'] = planner_results
             if args.strategy in ['group']:
                 result[-1][f'{args.model_name}_{args.strategy}_sole-planning_multi'] = planner_list
-                result[-1][f'{args.model_name}_{args.strategy}_{ind}_{group_num}_{select_strategy}_sole-planning_results'] = planner_results
+                result[-1][
+                    f'{args.model_name}_{args.strategy}_{ind}_{group_num}_{select_strategy}_sole-planning_results'] = planner_results
             print("write to json file")
             with open(os.path.join(f'{args.output_dir}/{args.set_type}/generated_plan_{number}.json'), 'w') as f:
                 json.dump(result, f, indent=4)
-            #pdb.set_trace()
+            # pdb.set_trace()
         print(cb)

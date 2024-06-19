@@ -1,6 +1,11 @@
 ### NLP Tasks: SSP
-To align previous experiences (e.g., Self-Refine and Solo Performance Prompting), we select three NLP knowledge-intensive and reasoning-intensive tasks, i.e., Logic Grid Puzzle, Trivia Creative Writing and Codenames Collaborative.
+
+To align previous experiences (e.g., Self-Refine and Solo Performance Prompting), we select three NLP
+knowledge-intensive and reasoning-intensive tasks, i.e., Logic Grid Puzzle, Trivia Creative Writing and Codenames
+Collaborative.
+
 - For NLP tasks:
+
 ```bash
 cd ssp/
 # task in ['writing', 'logic', 'code']

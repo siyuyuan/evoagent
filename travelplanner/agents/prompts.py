@@ -1,6 +1,5 @@
 from langchain.prompts import PromptTemplate
 
-
 ZEROSHOT_REACT_INSTRUCTION = """Collect information for a query plan using interleaving 'Thought', 'Action', and 'Observation' steps. Ensure you gather valid information related to transportation, dining, attractions, and accommodation. All information should be written in Notebook, which will then be input into the Planner tool. Note that the nested use of tools is prohibited. 'Thought' can reason about the current situation, and 'Action' can have 8 different types:
 (1) FlightSearch[Departure City, Destination City, Date]:
 Description: A flight information retrieval tool.
@@ -54,13 +53,10 @@ Each action only calls one function once. Do not add any description in the acti
 
 Query: {query}{scratchpad}"""
 
-
-
 zeroshot_react_agent_prompt = PromptTemplate(
-                        input_variables=["query", "scratchpad"],
-                        template=ZEROSHOT_REACT_INSTRUCTION,
-                        )
-
+    input_variables=["query", "scratchpad"],
+    template=ZEROSHOT_REACT_INSTRUCTION,
+)
 
 OVERGEN_PLANNER_INSTRUCTION = """You are a proficient planner. Based on the provided information and query, please give me a detailed plan, including specifics such as flight numbers (e.g., F0123456), restaurant names, and accommodation names. Note that all the information in your plan should be derived from the provided data. You must adhere to the format given in the example. Additionally, all details should align with commonsense. The symbol '-' indicates that information is unnecessary. For example, in the provided sample, you do not need to plan after returning to the departure city. When you travel to two cities in one day, you should note it in the 'Current City' section as in the example (i.e., from A to B).
 
@@ -108,11 +104,9 @@ Three Different Candidate Travel Plans:
 """
 
 overgen_planner_agent_prompt = PromptTemplate(
-                        input_variables=["text","query"],
-                        template = OVERGEN_PLANNER_INSTRUCTION,
-                        )
-
-
+    input_variables=["text", "query"],
+    template=OVERGEN_PLANNER_INSTRUCTION,
+)
 
 SELECT_PLANNER_INSTRUCTION = """You are a proficient planner. Based on the provided information and query, please give me a detailed plan, including specifics such as flight numbers (e.g., F0123456), restaurant names, and accommodation names. Note that all the information in your plan should be derived from the provided data. You must adhere to the format given in the example. Additionally, all details should align with commonsense. The symbol '-' indicates that information is unnecessary. For example, in the provided sample, you do not need to plan after returning to the departure city. When you travel to two cities in one day, you should note it in the 'Current City' section as in the example (i.e., from A to B).
 
@@ -159,9 +153,9 @@ Final Travel Plan:
 """
 
 select_planner_agent_prompt = PromptTemplate(
-                        input_variables=["text","query","select"],
-                        template = SELECT_PLANNER_INSTRUCTION,
-                        )
+    input_variables=["text", "query", "select"],
+    template=SELECT_PLANNER_INSTRUCTION,
+)
 
 ALL_PLANNER_INSTRUCTION = """You are a proficient planner. Based on the provided information and query, please give me a detailed plan, including specifics such as flight numbers (e.g., F0123456), restaurant names, and accommodation names. Note that all the information in your plan should be derived from the provided data. You must adhere to the format given in the example. Additionally, all details should align with commonsense. The symbol '-' indicates that information is unnecessary. For example, in the provided sample, you do not need to plan after returning to the departure city. When you travel to two cities in one day, you should note it in the 'Current City' section as in the example (i.e., from A to B).
 
@@ -212,10 +206,9 @@ Refined Travel Plan:
 """
 
 all_planner_agent_prompt = PromptTemplate(
-                        input_variables=["text","query", "old_answer", "select", "n"],
-                        template = ALL_PLANNER_INSTRUCTION,
-                        )
-
+    input_variables=["text", "query", "old_answer", "select", "n"],
+    template=ALL_PLANNER_INSTRUCTION,
+)
 
 PK_PLANNER_INSTRUCTION = """
 Given information: {text}
@@ -230,10 +223,9 @@ You need to give reasons first and then give the answer with the format: \"Final
 """
 
 pk_planner_agent_prompt = PromptTemplate(
-                        input_variables=["text", "query", "n", "select"],
-                        template = PK_PLANNER_INSTRUCTION,
-                        )
-
+    input_variables=["text", "query", "n", "select"],
+    template=PK_PLANNER_INSTRUCTION,
+)
 
 PLANNER_INSTRUCTION = """You are a proficient planner. Based on the provided information and query, please give me a detailed plan, including specifics such as flight numbers (e.g., F0123456), restaurant names, and accommodation names. Note that all the information in your plan should be derived from the provided data. You must adhere to the format given in the example. Additionally, all details should align with commonsense. The symbol '-' indicates that information is unnecessary. For example, in the provided sample, you do not need to plan after returning to the departure city. When you travel to two cities in one day, you should note it in the 'Current City' section as in the example (i.e., from A to B).
 
@@ -402,30 +394,29 @@ Given information: {text}
 Query: {query}{scratchpad} """
 
 planner_agent_prompt = PromptTemplate(
-                        input_variables=["text","query"],
-                        template = PLANNER_INSTRUCTION,
-                        )
+    input_variables=["text", "query"],
+    template=PLANNER_INSTRUCTION,
+)
 
 cot_planner_agent_prompt = PromptTemplate(
-                        input_variables=["text","query"],
-                        template = COT_PLANNER_INSTRUCTION,
-                        )
+    input_variables=["text", "query"],
+    template=COT_PLANNER_INSTRUCTION,
+)
 
 react_planner_agent_prompt = PromptTemplate(
-                        input_variables=["text","query", "scratchpad"],
-                        template = REACT_PLANNER_INSTRUCTION,
-                        )
+    input_variables=["text", "query", "scratchpad"],
+    template=REACT_PLANNER_INSTRUCTION,
+)
 
 reflect_prompt = PromptTemplate(
-                        input_variables=["text", "query", "scratchpad"],
-                        template = REFLECT_INSTRUCTION,
-                        )
+    input_variables=["text", "query", "scratchpad"],
+    template=REFLECT_INSTRUCTION,
+)
 
 react_reflect_planner_agent_prompt = PromptTemplate(
-                        input_variables=["text", "query", "reflections", "scratchpad"],
-                        template = REACT_REFLECT_PLANNER_INSTRUCTION,
-                        )
-
+    input_variables=["text", "query", "reflections", "scratchpad"],
+    template=REACT_REFLECT_PLANNER_INSTRUCTION,
+)
 
 PLANNER_INSTRUCTION_META = """
 You are a proficient planner. Based on the provided information and query, please give me a detailed plan, including specifics such as flight numbers (e.g., F0123456), restaurant names, and accommodation names. Note that all the information in your plan should be derived from the provided data. You must adhere to the format given in the example. Additionally, all details should align with commonsense. The symbol '-' indicates that information is unnecessary. For example, in the provided sample, you do not need to plan after returning to the departure city. When you travel to two cities in one day, you should note it in the 'Current City' section as in the example (i.e., from A to B).
@@ -481,10 +472,9 @@ Now, you can give the description for a new expert (Please note that only be one
 """
 
 meta_planner_agent_prompt = PromptTemplate(
-                        input_variables=["text", "query", "answer", "description"],
-                        template = PLANNER_INSTRUCTION_META,
-                        )
-
+    input_variables=["text", "query", "answer", "description"],
+    template=PLANNER_INSTRUCTION_META,
+)
 
 PLANNER_INSTRUCTION_MULTI = """
 {description}
@@ -529,10 +519,9 @@ Travel Plan:
 """
 
 multi_planner_agent_prompt = PromptTemplate(
-                        input_variables=["text", "query", "description"],
-                        template = PLANNER_INSTRUCTION_MULTI,
-                        )
-
+    input_variables=["text", "query", "description"],
+    template=PLANNER_INSTRUCTION_MULTI,
+)
 
 PLANNER_INSTRUCTION_REFINE = """
 You are a proficient planner. Based on the provided information and query, please give me a detailed plan, including specifics such as flight numbers (e.g., F0123456), restaurant names, and accommodation names. Note that all the information in your plan should be derived from the provided data. You must adhere to the format given in the example. Additionally, all details should align with commonsense. The symbol '-' indicates that information is unnecessary. For example, in the provided sample, you do not need to plan after returning to the departure city. When you travel to two cities in one day, you should note it in the 'Current City' section as in the example (i.e., from A to B).
@@ -583,9 +572,9 @@ Refined Travel Plan:
 """
 
 refine_planner_agent_prompt = PromptTemplate(
-                        input_variables=["text", "query", "old_answer", "description", "new_answer"],
-                        template = PLANNER_INSTRUCTION_REFINE,
-                        )
+    input_variables=["text", "query", "old_answer", "description", "new_answer"],
+    template=PLANNER_INSTRUCTION_REFINE,
+)
 
 PLANNER_INSTRUCTION_FEEDBACK = """
 You are a helpful assistant that provides feedback on a travel plan for a user's query.
@@ -598,10 +587,10 @@ Please do not refine the plan but give some insightful suggestions for the trave
 Suggestion:
 """
 
-feedback_planner_agent_prompt= PromptTemplate(
-                        input_variables=["text", "query", "answer"],
-                        template = PLANNER_INSTRUCTION_FEEDBACK,
-                        )
+feedback_planner_agent_prompt = PromptTemplate(
+    input_variables=["text", "query", "answer"],
+    template=PLANNER_INSTRUCTION_FEEDBACK,
+)
 PLANNER_INSTRUCTION_SELF_REFINE = """
 You are a proficient planner. Based on the provided information and query, please give me a detailed plan, including specifics such as flight numbers (e.g., F0123456), restaurant names, and accommodation names. Note that all the information in your plan should be derived from the provided data. You must adhere to the format given in the example. Additionally, all details should align with commonsense. The symbol '-' indicates that information is unnecessary. For example, in the provided sample, you do not need to plan after returning to the departure city. When you travel to two cities in one day, you should note it in the 'Current City' section as in the example (i.e., from A to B).
 
@@ -650,13 +639,12 @@ Now you can refine your answer with this his suggestion to better meet the query
 Refined Travel Plan: 
 """
 
-self_refine_planner_agent_prompt=PromptTemplate(
-                        input_variables=["text", "query", "answer", "feedback"],
-                        template = PLANNER_INSTRUCTION_SELF_REFINE,
-                        )
+self_refine_planner_agent_prompt = PromptTemplate(
+    input_variables=["text", "query", "answer", "feedback"],
+    template=PLANNER_INSTRUCTION_SELF_REFINE,
+)
 
-
-PLANNER_INSTRUCTION_CHECK= """
+PLANNER_INSTRUCTION_CHECK = """
 Given information: {text}
 Query: {query}
 
@@ -673,12 +661,10 @@ The new expert must meet both of the above two criteria. If any of the criteria 
 Give the reason first and then give the choice. If retaining, please reply with: 'Retain'. If discarding, please reply with: 'Discard'."
 """
 
-check_planner_agent_prompt=PromptTemplate(
-                        input_variables=["text", "query", "description_ls", "description"],
-                        template = PLANNER_INSTRUCTION_CHECK,
-                        )
-
-
+check_planner_agent_prompt = PromptTemplate(
+    input_variables=["text", "query", "description_ls", "description"],
+    template=PLANNER_INSTRUCTION_CHECK,
+)
 
 PLANNER_INSTRUCTION_PROMPTREFINE = """
 Given information: {text}
@@ -692,10 +678,9 @@ Description:
 """
 
 promptrefine_planner_agent_prompt = PromptTemplate(
-                        input_variables=["text", "query", "answer"],
-                        template = PLANNER_INSTRUCTION_PROMPTREFINE,
-                        )
-
+    input_variables=["text", "query", "answer"],
+    template=PLANNER_INSTRUCTION_PROMPTREFINE,
+)
 
 PLANNER_INSTRUCTION_SUGGEST = """
 {description}
@@ -708,7 +693,7 @@ Please do not refine the plan but give some insightful suggestions for the trave
 Suggestion:
 """
 
-suggest_planner_agent_prompt= PromptTemplate(
-                        input_variables=["text", "query", "answer", "description"],
-                        template = PLANNER_INSTRUCTION_SUGGEST,
-                        )
+suggest_planner_agent_prompt = PromptTemplate(
+    input_variables=["text", "query", "answer", "description"],
+    template=PLANNER_INSTRUCTION_SUGGEST,
+)

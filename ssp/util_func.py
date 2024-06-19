@@ -22,24 +22,24 @@ from langchain import LLMChain
 import os
 import openai
 
-safety_settings = [ 
+safety_settings = [
     {
-        "category": "HARM_CATEGORY_HARASSMENT", 
-        "threshold": "BLOCK_NONE" 
-    }, 
-    { 
-        "category": "HARM_CATEGORY_HATE_SPEECH", 
-        "threshold": "BLOCK_NONE" 
-    }, 
-    { 
-        "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", 
-        "threshold": "BLOCK_NONE" 
-    }, 
-    { 
-        "category": "HARM_CATEGORY_DANGEROUS_CONTENT", 
-        "threshold": "BLOCK_NONE" 
-    } 
-] 
+        "category": "HARM_CATEGORY_HARASSMENT",
+        "threshold": "BLOCK_NONE"
+    },
+    {
+        "category": "HARM_CATEGORY_HATE_SPEECH",
+        "threshold": "BLOCK_NONE"
+    },
+    {
+        "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+        "threshold": "BLOCK_NONE"
+    },
+    {
+        "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+        "threshold": "BLOCK_NONE"
+    }
+]
 
 if os.environ["task"] == 'writing':
     from agent_prompt_writing import *
@@ -58,11 +58,11 @@ def message_construction(model_name, prompt):
         ]
     return messages
 
+
 def refine_func(ind, question, answer, model_name, data_type):
     i = 0
     answer_list = []
     while i < ind:
-        
         prompt = feedback_agent_prompt.format(question=question, answer=answer)
         messages = message_construction(model_name, prompt)
         feedback_description = evaluator_construction(messages, model_name, question, data_type)
@@ -73,23 +73,23 @@ def refine_func(ind, question, answer, model_name, data_type):
 
         answer_list.append({
             "time": i,
-            "results":answer,
+            "results": answer,
             "refine": feedback_description,
             "new_results": new_answer
-                             })
-        #pdb.set_trace()
+        })
+        # pdb.set_trace()
         answer = new_answer
-        i = i+1
+        i = i + 1
 
     return answer_list, answer
 
+
 def ssp_func(ind, question, answer, model_name, data_type):
-    
     prompt = persona_gen_agent_prompt.format(question=question)
     messages = message_construction(model_name, prompt)
     persona_ls = evaluator_construction(messages, model_name, question, data_type)
     persona_ls = persona_ls.split(";")
-    #pdb.set_trace()
+    # pdb.set_trace()
     suggest_inital = []
     for persona in persona_ls:
         prompt = suggest_gen_agent_prompt.format(question=question, persona=persona)
@@ -105,7 +105,7 @@ def ssp_func(ind, question, answer, model_name, data_type):
         {
             "persona": persona_ls,
             "suggest_inital": suggest_inital,
-            "answer":answer,
+            "answer": answer,
         }
     )
     i = 0
@@ -120,26 +120,27 @@ def ssp_func(ind, question, answer, model_name, data_type):
             else:
                 suggest_temp.append(f"{persona.strip()}: {ssp_feedback_description.strip()}")
         if len(suggest_temp) == 0:
-            #pdb.set_trace()
+            # pdb.set_trace()
             break
-        prompt = ssp_self_refine_agent_prompt.format(question=question, answer=answer, suggestion='\n'.join(suggest_temp))
+        prompt = ssp_self_refine_agent_prompt.format(question=question, answer=answer,
+                                                     suggestion='\n'.join(suggest_temp))
         messages = message_construction(model_name, prompt)
         new_answer = evaluator_construction(messages, model_name, question, data_type)
 
         answer_list.append({
             "time": i,
-            "answer":answer,
+            "answer": answer,
             "suggest": suggest_temp,
             "new_answer": new_answer
-                             })
-        #pdb.set_trace()
+        })
+        # pdb.set_trace()
         answer = new_answer
-        i = i+1
+        i = i + 1
 
     return answer_list, answer
 
+
 def collaboration_func(ind, question, answer, model_name, data_type):
-    
     i = 0
     answer_list = []
     description_ls = []
@@ -156,7 +157,7 @@ def collaboration_func(ind, question, answer, model_name, data_type):
         sub_answer = evaluator_construction(messages, model_name, question, data_type)
 
         prompt = refine_agent_prompt.format(question=question, description=description,
-                                             old_answer=answer, new_answer=sub_answer)
+                                            old_answer=answer, new_answer=sub_answer)
         messages = message_construction(model_name, prompt)
         new_answer = evaluator_construction(messages, model_name, question, data_type)
 
@@ -166,20 +167,19 @@ def collaboration_func(ind, question, answer, model_name, data_type):
             "description": description,
             "sub_answer": sub_answer,
             "new_results": new_answer
-                             })
+        })
 
         answer = new_answer
-        i = i+1
+        i = i + 1
 
     return answer_list, answer
-
 
 
 def evaluator_construction(messages, model_name, prompt, data_type='azure'):
     ind = 0
     while True:
         try:
-            if data_type=="azure":
+            if data_type == "azure":
                 openai.api_key = os.environ["OPENAI_API_KEY"]
                 openai.api_base = os.environ["OPENAI_API_BASE"]
                 openai.api_type = "azure"
@@ -191,12 +191,13 @@ def evaluator_construction(messages, model_name, prompt, data_type='azure'):
                     stop=None)
                 clean_result = result["choices"][0]["message"]["content"]
             elif data_type == 'gemini':
-                generation_config = { 
-                    "temperature": 0, 
-                } 
+                generation_config = {
+                    "temperature": 0,
+                }
                 genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
-                #pdb.set_trace()
-                model = genai.GenerativeModel('gemini-pro', generation_config=generation_config, safety_settings=safety_settings)
+                # pdb.set_trace()
+                model = genai.GenerativeModel('gemini-pro', generation_config=generation_config,
+                                              safety_settings=safety_settings)
                 result = model.generate_content(messages)
                 clean_result = result.text
             elif data_type == 'openai':
@@ -218,16 +219,17 @@ def evaluator_construction(messages, model_name, prompt, data_type='azure'):
                     temperature=0,
                     max_tokens=512,
                     stop=None)
-            
+
                 clean_result = result["choices"][0]["message"]["content"]
             print(clean_result)
             return clean_result
         except Exception as e:
-            #print(f"执行失败：{e}")
+            # print(f"执行失败：{e}")
             if ind > 100000:
                 return -1
             ind += 1
             continue
+
 
 def get_last_processed_index(progress_file):
     """Retrieve the last processed index from the progress file."""
@@ -243,7 +245,8 @@ def update_progress(progress_file, index):
     """Update the last processed index in the progress file."""
     with open(progress_file, 'w', encoding='utf-8') as f:
         f.write(str(index))
-        
+
+
 def read_jsonline(address):
     not_mark = []
     with open(address, 'r', encoding="utf-8") as f:
@@ -252,10 +255,12 @@ def read_jsonline(address):
             not_mark.append(jsonstr)
     return not_mark
 
+
 def read_json(address):
-    with open(address,'r', encoding='utf-8') as json_file:
+    with open(address, 'r', encoding='utf-8') as json_file:
         json_data = json.load(json_file)
     return json_data
+
 
 def read_jsonl(address):
     not_mark = []
@@ -281,30 +286,31 @@ def read_tsv(address):
             dataset.append(row)
     return dataset
 
+
 def read_txt(address, sep):
     dataset = []
     with open(address, 'r', encoding="utf-8") as f:
         for data in f.readlines():
-            data = data.replace('\n','').split(sep)
+            data = data.replace('\n', '').split(sep)
             dataset.append(data)
     return dataset
 
 
-
-def save_jsonline(ls,address):
+def save_jsonline(ls, address):
     for item in ls:
         with open(address, 'a+', encoding='utf-8') as f:
             line = json.dumps(item, ensure_ascii=False)
-            f.write(line+'\n')
+            f.write(line + '\n')
 
 
-def save_json(ls,address):
+def save_json(ls, address):
     json_str = json.dumps(ls, indent=4)
     with open(address, 'w', encoding='utf-8') as json_file:
-        json.dump(ls,json_file,ensure_ascii=False,indent=4)
+        json.dump(ls, json_file, ensure_ascii=False, indent=4)
+
 
 def sort_dic(dic):
-    dic = sorted(dic.items(), key=lambda kv: (kv[1], kv[0]),reverse=True)
+    dic = sorted(dic.items(), key=lambda kv: (kv[1], kv[0]), reverse=True)
     return dic
 
 
@@ -331,5 +337,3 @@ def create_logger(log_path):
     console.setFormatter(formatter)
     logger.addHandler(console)
     return logger
-
-

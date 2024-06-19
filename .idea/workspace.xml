@@ -4,7 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="772eaac1-b8f2-45e8-8fe7-428126f2f799" name="Changes" comment="" />
+    <list default="true" id="772eaac1-b8f2-45e8-8fe7-428126f2f799" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmmu/agent_prompt.py" beforeDir="false" afterPath="$PROJECT_DIR$/mmmu/agent_prompt.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmmu/llm.py" beforeDir="false" afterPath="$PROJECT_DIR$/mmmu/llm.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmmu/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/mmmu/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmmu/run_collaborate.py" beforeDir="false" afterPath="$PROJECT_DIR$/mmmu/run_collaborate.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scienceworld/collaboration_prompt.py" beforeDir="false" afterPath="$PROJECT_DIR$/scienceworld/collaboration_prompt.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scienceworld/eval.py" beforeDir="false" afterPath="$PROJECT_DIR$/scienceworld/eval.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scienceworld/eval_collaboration.py" beforeDir="false" afterPath="$PROJECT_DIR$/scienceworld/eval_collaboration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ssp/llm_collaborate.py" beforeDir="false" afterPath="$PROJECT_DIR$/ssp/llm_collaborate.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ssp/llm_collaborate_codenames.py" beforeDir="false" afterPath="$PROJECT_DIR$/ssp/llm_collaborate_codenames.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ssp/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/ssp/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ssp/util_func.py" beforeDir="false" afterPath="$PROJECT_DIR$/ssp/util_func.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/travelplanner/agents/prompts.py" beforeDir="false" afterPath="$PROJECT_DIR$/travelplanner/agents/prompts.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/travelplanner/tools/planner/sole_planning.py" beforeDir="false" afterPath="$PROJECT_DIR$/travelplanner/tools/planner/sole_planning.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

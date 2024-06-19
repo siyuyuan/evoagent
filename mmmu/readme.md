@@ -1,7 +1,10 @@
 ### Multi-Modal Tasks: MMMU
-To align previous experiences (e.g., Self-Refine and Solo Performance Prompting), we select one multi-modal task, i.e., MMMU.
+
+To align previous experiences (e.g., Self-Refine and Solo Performance Prompting), we select one multi-modal task, i.e.,
+MMMU.
 
 - For MMMU:
+
 ```bash
 cd mmmu/
 # MODEL_NAME in ['gpt-4v','gemini-pro']

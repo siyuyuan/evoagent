@@ -1,4 +1,3 @@
- 
 import argparse
 import json
 import logging
@@ -18,6 +17,7 @@ import tiktoken
 import pdb
 from eval_utils import findValidActionNew, is_action_failed, load_variation
 from collaboration_prompt import *
+
 INIT_PROMPT = '''
 Interact with a household to solve a task. Each turn, you can choose from one of the following options:
 1. Think: You could think step-by-step to tell your reasoning and planning to solve the task, which will help you handle the task easier.
@@ -29,12 +29,14 @@ Exactly only one option could be chosen in a turn.
 CONTROLLER_ADDR = os.environ.get('CONTROLLER_ADDR', '').split(',')
 
 import copy
+
+
 def collaboration_func(ind, env, state, action, recent_actions, logger, model_name):
     i = 0
     action_ls = []
     description_ls = []
     while i < ind:
-        
+
         prompt = meta_agent_prompt.format(description='\n-'.join(description_ls))
         copied_state = copy.deepcopy(state)
         copied_state.append({"role": "user", "content": prompt})
@@ -44,23 +46,25 @@ def collaboration_func(ind, env, state, action, recent_actions, logger, model_na
         multi_copied_state = copy.deepcopy(state)
         if 'sorry' in description:
             description = "You are a helpful assistant."
-        multi_copied_state = [{"role": "system", "content": description.strip()}]+multi_copied_state[1:]
+        multi_copied_state = [{"role": "system", "content": description.strip()}] + multi_copied_state[1:]
         sub_action = llm_gpt(multi_copied_state, model_name)
         prompt = refine_agent_prompt.format(description=description, old_action=action, new_action=sub_action)
         refine_copied_state = copy.deepcopy(state)
         refine_copied_state.append({"role": "user", "content": prompt})
         new_action = llm_gpt(refine_copied_state, model_name)
         action = new_action
-        
-        i = i+1
+
+        i = i + 1
 
     return action_ls, action
+
 
 def clean(s):
     clean_toks = ['\n', '\t']
     for tok in clean_toks:
         s = s.replace(tok, ' ')
     return s
+
 
 def num_tokens_from_messages(messages, model="gpt-3.5-turbo-0613"):
     """Return the number of tokens used by a list of messages."""
@@ -76,7 +80,7 @@ def num_tokens_from_messages(messages, model="gpt-3.5-turbo-0613"):
         "gpt-4-32k-0314",
         "gpt-4-0613",
         "gpt-4-32k-0613",
-        }:
+    }:
         tokens_per_message = 3
         tokens_per_name = 1
     elif model == "gpt-3.5-turbo-0301":
@@ -102,6 +106,7 @@ def num_tokens_from_messages(messages, model="gpt-3.5-turbo-0613"):
     num_tokens += 3  # every reply is primed with <|start|>assistant<|message|>
     return num_tokens
 
+
 def llm_gpt(prompt: List[Dict[str, str]], model: str) -> str:
     if not 'OPENAI_API_KEY' in os.environ:
         raise ValueError("OPENAI_API_KEY must be set to eval GPT models.")
@@ -123,7 +128,7 @@ def llm_gpt(prompt: List[Dict[str, str]], model: str) -> str:
                     continue
             print(text)
             return text.strip()
-        except Timeout: 
+        except Timeout:
             print("Timeout, retrying...")
         except ConnectionError:
             print("Connection error, retrying...")
@@ -131,12 +136,13 @@ def llm_gpt(prompt: List[Dict[str, str]], model: str) -> str:
             traceback.print_exc()
             try:
                 print(response)
-                #print(response.text)
+                # print(response.text)
             except:
                 pass
         time.sleep(5)
     else:
         raise Exception("Timeout after 3 retries.")
+
 
 def llm_tgi(prompt: str) -> str:
     data = {
@@ -160,7 +166,7 @@ def llm_tgi(prompt: str) -> str:
             print(text)
             return text.split('[INST]')[0].split('<|end_of_turn|>')[0].strip()
         # if timeout or connection error, retry
-        except Timeout: 
+        except Timeout:
             print("Timeout, retrying...")
         except ConnectionError:
             print("Connection error, retrying...")
@@ -174,6 +180,7 @@ def llm_tgi(prompt: str) -> str:
         time.sleep(5)
     else:
         raise Exception("Timeout after 3 retries.")
+
 
 def get_file_name(args, task_num):
     if (len(args["output_path"]) > 0):
@@ -190,10 +197,12 @@ def get_file_name(args, task_num):
     filenameOutPrefixSeed = args["output_path"] + "task" + str(task_num)
 
     return filenameOutPrefixSeed
-  
+
+
 def process_examples(conv: Conversation, example: List[str]):
     for i, ex in enumerate(example):
         conv.append_message(conv.roles[i % 2], ex)
+
 
 def get_prompt(conv: Conversation) -> str:
     if conv.name == 'openchat':
@@ -205,7 +214,7 @@ def get_prompt(conv: Conversation) -> str:
                 ret += role + ":"
         return ret
     else:
-        #pdb.set_trace()
+        # pdb.set_trace()
         ls = conv.messages
         ret = ''
         for role, message in ls:
@@ -214,19 +223,19 @@ def get_prompt(conv: Conversation) -> str:
             else:
                 ret += role + ":"
 
-        #pdb.set_trace()
+        # pdb.set_trace()
         return ret
         return conv.get_prompt()
 
+
 # Example user input console, to play through a game.
 def eval(args, task_num, logger):
-
     # Initialize environment
     # env = ScienceWorldEnv("", args["jar_path"], envStepLimit = args["env_step_limit"], threadNum = 0)
-    env = ScienceWorldEnv("", args["jar_path"], envStepLimit = args["env_step_limit"])
+    env = ScienceWorldEnv("", args["jar_path"], envStepLimit=args["env_step_limit"])
     taskNames = env.getTaskNames()
     taskName = taskNames[task_num]
-    #pdb.set_trace()
+    # pdb.set_trace()
     env.load(taskName, 0, args['simplification_str'])
     variations = load_variation(env, args, task_num, logger)
     filenameOutPrefixSeed = get_file_name(args, task_num)
@@ -234,7 +243,7 @@ def eval(args, task_num, logger):
     # Load init prompt
     with open(args["prompt_file"], 'r') as f:
         d = json.load(f)
-    
+
     # Load encoding tool to count token numbers
     token_model = args["model_name"] if 'gpt' in args["model_name"] else 'gpt-4'
     encoding = tiktoken.encoding_for_model('gpt-4')
@@ -248,7 +257,7 @@ def eval(args, task_num, logger):
         env.load(taskName, variation, args["simplification_str"], generateGoldPath=True)
         task_description = env.taskdescription()[18:]
         recent_actions = ["look around"]
- 
+
         obs, info = env.reset()
 
         done = False
@@ -260,7 +269,6 @@ def eval(args, task_num, logger):
         # however, the t5 model only generates the action "look around", which will result in a dead loop below
         # so the max_steps here is only used to avoid the model generating the same action forever
         max_steps = args["env_step_limit"] * 2
-
 
         if 'gpt' in args["model_name"]:
             conv = get_conversation_template(args["model_name"])
@@ -281,14 +289,15 @@ def eval(args, task_num, logger):
             conv.set_system_message("You are a helpful, respectful and honest assistant.")
         else:
             conv = get_conversation_template(args["model_name"])
-        
+
         conv.append_message(conv.roles[0], INIT_PROMPT)
         conv.append_message(conv.roles[1], 'Ok.')
 
         examples = d[str(task_num)]
         process_examples(conv, examples)
 
-        new_task = 'The preceding task has ended. Now, I will start a new task.\n' + clean(obs) + '\n' + task_description
+        new_task = 'The preceding task has ended. Now, I will start a new task.\n' + clean(
+            obs) + '\n' + task_description
         conv.append_message(conv.roles[0], new_task.strip())
 
         max_len = 4096
@@ -306,17 +315,17 @@ def eval(args, task_num, logger):
                     del conv.messages[2:4]
 
             conv.append_message(conv.roles[1], None)
-            #pdb.set_trace()
+            # pdb.set_trace()
             if 'gpt' in args["model_name"]:
                 prompt = conv.to_openai_api_messages()
             else:
                 prompt = get_prompt(conv)
 
-            #pdb.set_trace()
-            #logger.info(f"###Prompt###\n{prompt}")
+            # pdb.set_trace()
+            # logger.info(f"###Prompt###\n{prompt}")
 
             if 'gpt' in args["model_name"]:
-                #pdb.set_trace()
+                # pdb.set_trace()
                 action = llm_gpt(prompt, args["model_name"])
             else:
                 action = llm_tgi(prompt)
@@ -332,7 +341,7 @@ def eval(args, task_num, logger):
                 # Get valid actions at this point
                 action = findValidActionNew([action], env, info['look'], recent_actions, None, logger)
                 action_ls, action = collaboration_func(1, env, prompt, action,
-                                                   recent_actions, logger, args["model_name"])
+                                                       recent_actions, logger, args["model_name"])
                 action = findValidActionNew([action], env, info['look'], recent_actions, None, logger)
                 obs, reward, done, info = env.step(action)
 
@@ -355,16 +364,16 @@ def eval(args, task_num, logger):
                         done = True
                         score = 0
                 last_score = score
-            
+
             obs = clean(obs)
             print(obs)
 
             # Add action and observation to game prompt
             conv.append_message(conv.roles[0], obs)
-            
+
             recent_actions.append(f'({action}, {obs})')
-            
-            #logger.info("Input string: " + str(input_str))
+
+            # logger.info("Input string: " + str(input_str))
             logger.info(f"Variation: {variation}, Step: {step}, Action: {action}")
             logger.info("Obs: " + obs)
             logger.info(f"Score: {score}")
@@ -373,25 +382,23 @@ def eval(args, task_num, logger):
             step += 1
             if (step >= max_steps) or done:
                 break
-  
 
-            #logger.info("Recent Actions: " + str(recent_actions))
+            # logger.info("Recent Actions: " + str(recent_actions))
 
             # Early stopping if we're in a loop
             if len(recent_actions) >= 5 and len(set(recent_actions[-5:])) == 2:
                 logger.info("Many recent actions in history are the same -- model is likely in a loop, stopping early.")
                 break
 
-
         # Store results
-        env.storeRunHistory(variation, notes = {'mode':"react_baseline", 'lm': None} )
+        env.storeRunHistory(variation, notes={'mode': "react_baseline", 'lm': None})
         env.saveRunHistoriesBufferIfFull(filenameOutPrefixSeed, maxPerFile=args["max_episode_per_file"])
 
         scores.append(score)
 
         logger.info("Run completed...")
         logger.info("Scores: " + str(scores))
- 
+
         time.sleep(2)
 
     # Episodes are finished -- manually save any last histories still in the buffer
@@ -401,7 +408,8 @@ def eval(args, task_num, logger):
     logger.info("Average score: " + str(avg))
 
     f = open(filenameOutPrefixSeed + "-score.txt", "a")
-    f.write("\n" + "Task name:" + taskName + "Scores: " + str(scores) + " Average score: " + str(avg) + " Args: " + str(args) + "\n")
+    f.write("\n" + "Task name:" + taskName + "Scores: " + str(scores) + " Average score: " + str(avg) + " Args: " + str(
+        args) + "\n")
     f.close()
 
     logger.info("Shutting down server...")
@@ -410,10 +418,9 @@ def eval(args, task_num, logger):
     logger.info("Completed.")
 
 
-
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--jar_path", type=str, default="") 
+    parser.add_argument("--jar_path", type=str, default="")
     parser.add_argument("--task_nums", default="0")  # use comma to split 
     parser.add_argument("--env_step_limit", type=int, default=100)
     parser.add_argument("--simplification_str", default="easy")
@@ -428,6 +435,7 @@ def parse_args():
     params = vars(args)
     return params
 
+
 #
 #   Main
 #
@@ -436,7 +444,7 @@ def init_logger(args, task_num, log_level=INFO):
     filenameOutPrefixSeed = get_file_name(args, task_num)
     logger = logging.getLogger()
     formatter = logging.Formatter("[%(asctime)s][%(levelname)s\t] %(message)s",
-                                    datefmt='%Y-%m-%d %H:%M:%S')
+                                  datefmt='%Y-%m-%d %H:%M:%S')
     logger.setLevel(log_level)
 
     ch = logging.StreamHandler()
@@ -455,15 +463,17 @@ def init_logger(args, task_num, log_level=INFO):
         logger.addHandler(fh)
     return logger
 
+
 def main():
     args = parse_args()
-    print(args) 
+    print(args)
 
     task_nums = args["task_nums"].split(",")
     for task_num in task_nums:
         logger = init_logger(args, task_num)
         logger.info(args)
         eval(args, int(task_num), logger)
-        
+
+
 if __name__ == "__main__":
     main()
