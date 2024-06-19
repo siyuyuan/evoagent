@@ -68,7 +68,7 @@ python3 run_collaborate.py --model_name $MODEL_NAME --ind $IND
 
 We choose ScienceWorld, a complex interactive environment requiring skills in long-term memory, sub-task decomposition, and scientific and commonsense knowledge. Here, we evaluate 30 scientific tasks in ScienceWorld to demonstrate the capability of EvoAgent in solving tasks in more challenging open-world environments. 
 
-This evaluation code is adapted from [AgentTuning](https://github.com/THUDM/AgentTuning/tree/main/eval_heldout/science-world) and [SwiftSage](https://github.com/yuchenlin/SwiftSage)
+This code is adapted from [AgentTuning](https://github.com/THUDM/AgentTuning/tree/main/eval_heldout/science-world) and [SwiftSage](https://github.com/yuchenlin/SwiftSage)
 
 #### Prerequisites
 
@@ -88,7 +88,7 @@ conda install -c conda-forge openjdk # if needed
 #### Code
 
 ```bash
-export OPENAI_API_KEY=sk-your-openai-api-key
+export OPENAI_API_KEY=YOUR_OPENAI_KEY
 # MODEL_NAME in ['gpt-4-X','gpt-3.5-turbo-X']
 export MODEL_NAME=MODEL_NAME
 
@@ -117,6 +117,9 @@ pip install -r requirements.txt
 2. Download the [database](https://drive.google.com/file/d/1pF1Sw6pBmq2sFkJvm-LzJOqrmfWoQgxE/view?usp=drive_link) and unzip it to the `TravelPlanner` directory (i.e., `your/path/TravelPlanner`).
 
 #### Code
+
+This code is adapted from [TravelPlanner](https://github.com/OSU-NLP-Group/TravelPlanner)
+
 ```bash
 export OUTPUT_DIR=path/to/your/output/file
 # We support MODEL in ['gpt-3.5-turbo-X','gpt-4-1106-preview','gemini','mistral-7B']
