@@ -1,32 +1,5 @@
 <h1 align="center">TravelPlanner<br> A Benchmark for Real-World Planning<br> with Language Agents </h1>
 
-![Travel Planner](https://img.shields.io/badge/Task-Planning-blue)
-![Travel Planner](https://img.shields.io/badge/Task-Tool_Use-blue) 
-![Travel Planner](https://img.shields.io/badge/Task-Language_Agents-blue)  
-![GPT-4](https://img.shields.io/badge/Model-GPT--4-green) 
-![LLMs](https://img.shields.io/badge/Model-LLMs-green)
-
-<p align="center">
-    <img src="images/icon.png" width="10%"> <br>
-</p>
-
-Code for the Paper "[TravelPlanner: A Benchmark for Real-World Planning with Language Agents](http://arxiv.org/abs/2402.01622)".
-
-![Demo Video GIF](images/TravelPlanner.gif)
-
-<p align="center">
-[<a href="https://osu-nlp-group.github.io/TravelPlanner/">Website</a>]•
-[<a href="http://arxiv.org/abs/2402.01622">Paper</a>] •
-[<a href="https://huggingface.co/datasets/osunlp/TravelPlanner">Dataset</a>] •
-[<a href="https://huggingface.co/spaces/osunlp/TravelPlannerLeaderboard">Leaderboard</a>] •
-[<a href="https://huggingface.co/spaces/osunlp/TravelPlannerEnvironment">Environment</a>] •
-[<a href="https://twitter.com/ysu_nlp/status/1754365367294562680">Twitter</a>]
-</p>
-
-## Updates
-
-- 2024/4/21: Provide [format check tool](./postprocess/format_check.py)  for testset submission files.  You can run it to check if there are any format errors in your file.
-
 # TravelPlanner
 
 TravelPlanner is a benchmark crafted for evaluating language agents in tool-use and complex planning within multiple constraints.
