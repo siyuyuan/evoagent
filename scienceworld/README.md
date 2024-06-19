@@ -1,37 +1,20 @@
-# ScienceWorld
+### Interactive Scientific Solving Simulation: ScienceWorld
 
-This evaluation code is adapted from [SwiftSage](https://github.com/yuchenlin/SwiftSage).
+We choose ScienceWorld, a complex interactive environment requiring skills in long-term memory, sub-task decomposition, and scientific and commonsense knowledge. Here, we evaluate 30 scientific tasks in ScienceWorld to demonstrate the capability of EvoAgent in solving tasks in more challenging open-world environments. 
 
-## Installation
-
-```bash
-conda create -n sciworld python=3.8 pip
-conda activate sciworld
-pip3 install scienceworld==1.1.3
-pip3 install -r requirements.txt
-pip3 install torch --extra-index-url https://download.pytorch.org/whl/cu116
-conda install -c "nvidia/label/cuda-11.6.0" cuda-toolkit
-conda install -c conda-forge openjdk # if needed 
-```
-
-## Evaluation
-
-### GPT
-
-Modify `eval-gpt.sh` to provide your OpenAI API key and optionally specify a model. Then run:
+This evaluation code is adapted from [AgentTuning](https://github.com/THUDM/AgentTuning/tree/main/eval_heldout/science-world) and [SwiftSage](https://github.com/yuchenlin/SwiftSage)
 
 ```bash
-bash eval-gpt.sh
+cd scienceworld/
+export OPENAI_API_KEY=sk-your-openai-api-key
+# MODEL_NAME in ['gpt-4-X','gpt-3.5-turbo-X']
+export MODEL_NAME=MODEL_NAME
+
+for task in {0..29}
+do
+    python eval_collaboration.py \
+        --task_nums $task \
+        --output_path logs/$MODEL_NAME \
+        --model_name $MODEL_NAME
+done
 ```
-
-### HuggingFace TGI (Text Generation Inference)
-
-Modify `eval-tgi.sh` to provide your TGI controller addresses in an comma-separated array. Then run:
-
-```bash
-bash eval-tgi.sh
-```
-
-----
-
-After evaluation is done, you can run `python metrics.py` to get the results.
