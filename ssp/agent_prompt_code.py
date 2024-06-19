@@ -17,10 +17,9 @@ Therefore, please remember you should not repeatedly create the same experts as 
 Now, you can give the description for a new expert (Please note that only be one, do not give multiple at one time):
 """
 spy_meta_agent_prompt = PromptTemplate(
-                        input_variables=["question", "answer", "description"],
-                        template = SPY_INSTRUCTION_META,
-                        )
-
+    input_variables=["question", "answer", "description"],
+    template=SPY_INSTRUCTION_META,
+)
 
 SPY_INSTRUCTION_MULTI = """
 {description}. 
@@ -29,11 +28,9 @@ You need to give reasons first and then give the answer with the format: \"Final
 """
 
 spy_multi_agent_prompt = PromptTemplate(
-                        input_variables=["question", "description"],
-                        template = SPY_INSTRUCTION_MULTI,
-                        )
-
-
+    input_variables=["question", "description"],
+    template=SPY_INSTRUCTION_MULTI,
+)
 
 SPY_INSTRUCTION_REFINE = """
 {question}
@@ -50,13 +47,9 @@ Revised Answer:
 """
 
 spy_refine_agent_prompt = PromptTemplate(
-                        input_variables=["question", "old_answer", "description", "new_answer"],
-                        template = SPY_INSTRUCTION_REFINE,
-                        )
-
-
-
-
+    input_variables=["question", "old_answer", "description", "new_answer"],
+    template=SPY_INSTRUCTION_REFINE,
+)
 
 SPY_INSTRUCTION_SELF_REFINE = """
 
@@ -73,10 +66,10 @@ You need to give reasons first and then give the answer with the format: \"Final
 Revised Answer:
 """
 
-spy_self_refine_agent_prompt=PromptTemplate(
-                        input_variables=["question", "answer", "feedback"],
-                        template = SPY_INSTRUCTION_SELF_REFINE,
-                        )
+spy_self_refine_agent_prompt = PromptTemplate(
+    input_variables=["question", "answer", "feedback"],
+    template=SPY_INSTRUCTION_SELF_REFINE,
+)
 
 SPY_INSTRUCTION_FEEDBACK = """
 {question}
@@ -86,15 +79,12 @@ Please do not refine the answer but give some insightful suggestions for the stu
 Suggestion:
 """
 
-spy_feedback_agent_prompt= PromptTemplate(
-                        input_variables=["question", "answer"],
-                        template = SPY_INSTRUCTION_FEEDBACK,
-                        )
+spy_feedback_agent_prompt = PromptTemplate(
+    input_variables=["question", "answer"],
+    template=SPY_INSTRUCTION_FEEDBACK,
+)
 
 from langchain.prompts import PromptTemplate
-
-
-
 
 GUESS_INSTRUCTION_META = """
 {question}
@@ -113,10 +103,9 @@ Therefore, please remember you should not repeatedly create the same experts as 
 Now, you can give the description for a new expert (Please note that only be one, do not give multiple at one time):
 """
 guess_meta_agent_prompt = PromptTemplate(
-                        input_variables=["question", "answer", "description"],
-                        template = GUESS_INSTRUCTION_META,
-                        )
-
+    input_variables=["question", "answer", "description"],
+    template=GUESS_INSTRUCTION_META,
+)
 
 GUESS_INSTRUCTION_MULTI = """
 {description}. 
@@ -125,11 +114,9 @@ You need to give reasons first and then give the answer with the format: \"Final
 """
 
 guess_multi_agent_prompt = PromptTemplate(
-                        input_variables=["question", "description", "n"],
-                        template = GUESS_INSTRUCTION_MULTI,
-                        )
-
-
+    input_variables=["question", "description", "n"],
+    template=GUESS_INSTRUCTION_MULTI,
+)
 
 GUESS_INSTRUCTION_REFINE = """
 {question}
@@ -146,13 +133,9 @@ Revised Answer:
 """
 
 guess_refine_agent_prompt = PromptTemplate(
-                        input_variables=["question", "old_answer", "description", "new_answer", "n"],
-                        template = GUESS_INSTRUCTION_REFINE,
-                        )
-
-
-
-
+    input_variables=["question", "old_answer", "description", "new_answer", "n"],
+    template=GUESS_INSTRUCTION_REFINE,
+)
 
 GUESS_INSTRUCTION_SELF_REFINE = """
 
@@ -169,10 +152,10 @@ You need to give reasons first and then give the answer with the format: \"Final
 Revised Answer:
 """
 
-guess_self_refine_agent_prompt=PromptTemplate(
-                        input_variables=["question", "answer", "feedback", "n"],
-                        template = GUESS_INSTRUCTION_SELF_REFINE,
-                        )
+guess_self_refine_agent_prompt = PromptTemplate(
+    input_variables=["question", "answer", "feedback", "n"],
+    template=GUESS_INSTRUCTION_SELF_REFINE,
+)
 
 GUESS_INSTRUCTION_FEEDBACK = """
 {question}
@@ -182,8 +165,7 @@ Please do not refine the answer but give some insightful suggestions for the stu
 Suggestion:
 """
 
-guess_feedback_agent_prompt= PromptTemplate(
-                        input_variables=["question", "answer"],
-                        template = GUESS_INSTRUCTION_FEEDBACK,
-                        )
-
+guess_feedback_agent_prompt = PromptTemplate(
+    input_variables=["question", "answer"],
+    template=GUESS_INSTRUCTION_FEEDBACK,
+)

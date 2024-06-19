@@ -17,10 +17,9 @@ Therefore, please remember you should not repeatedly create the same experts as 
 Now, you can give the description for a new expert (Please note that only be one, do not give multiple at one time):
 """
 meta_agent_prompt = PromptTemplate(
-                        input_variables=["question", "answer", "description"],
-                        template = INSTRUCTION_META,
-                        )
-
+    input_variables=["question", "answer", "description"],
+    template=INSTRUCTION_META,
+)
 
 INSTRUCTION_MULTI = """
 {description}. 
@@ -29,11 +28,9 @@ You need to give reasons first and then give the answer with the format: \"Final
 """
 
 multi_agent_prompt = PromptTemplate(
-                        input_variables=["question", "description"],
-                        template = INSTRUCTION_MULTI,
-                        )
-
-
+    input_variables=["question", "description"],
+    template=INSTRUCTION_MULTI,
+)
 
 INSTRUCTION_REFINE = """
 {question}
@@ -50,13 +47,9 @@ Revised Answer:
 """
 
 refine_agent_prompt = PromptTemplate(
-                        input_variables=["question", "old_answer", "description", "new_answer"],
-                        template = INSTRUCTION_REFINE,
-                        )
-
-
-
-
+    input_variables=["question", "old_answer", "description", "new_answer"],
+    template=INSTRUCTION_REFINE,
+)
 
 INSTRUCTION_SELF_REFINE = """
 
@@ -73,10 +66,10 @@ You need to give reasons first and then give the answer with the format: \"Final
 Revised Answer:
 """
 
-self_refine_agent_prompt=PromptTemplate(
-                        input_variables=["question", "answer", "feedback"],
-                        template = INSTRUCTION_SELF_REFINE,
-                        )
+self_refine_agent_prompt = PromptTemplate(
+    input_variables=["question", "answer", "feedback"],
+    template=INSTRUCTION_SELF_REFINE,
+)
 
 INSTRUCTION_FEEDBACK = """
 You are a helpful assistant that provides feedback on answers of coding.
@@ -89,16 +82,12 @@ Please do not refine the answer but give some insightful suggestions for the stu
 Suggestion:
 """
 
-feedback_agent_prompt= PromptTemplate(
-                        input_variables=["question", "answer"],
-                        template = INSTRUCTION_FEEDBACK,
-                        )
+feedback_agent_prompt = PromptTemplate(
+    input_variables=["question", "answer"],
+    template=INSTRUCTION_FEEDBACK,
+)
 
-
-
-
-
-PERSONA_GEN= """
+PERSONA_GEN = """
 When faced with a task, begin by identifying the participants who will contribute to solving the task. Then, initiate a multi-round collaboration process until a final solution is reached. The participants will give critical comments and detailed suggestions whenever necessary. 
 Here are some examples: 
 --
@@ -117,12 +106,12 @@ Task:
 Participants except you: 
 """
 
-persona_gen_agent_prompt=PromptTemplate(
-                        input_variables=["question"],
-                        template = PERSONA_GEN,
-                        )
+persona_gen_agent_prompt = PromptTemplate(
+    input_variables=["question"],
+    template=PERSONA_GEN,
+)
 
-SUGGEST_GEN= """
+SUGGEST_GEN = """
 You are a {persona}.
 
 
@@ -132,13 +121,12 @@ Do not answer the query but give some suggestions for an AI assistant for better
 Suggestion:
 """
 
-suggest_gen_agent_prompt=PromptTemplate(
-                        input_variables=["question", "persona"],
-                        template = SUGGEST_GEN,
-                        )
+suggest_gen_agent_prompt = PromptTemplate(
+    input_variables=["question", "persona"],
+    template=SUGGEST_GEN,
+)
 
-
-SSP_INSTRUCTION= """
+SSP_INSTRUCTION = """
 
 {question}
 
@@ -149,11 +137,10 @@ Now you can refine your answer with his answer to better answer the question. Yo
 Answer:
 """
 
-ssp_agent_prompt=PromptTemplate(
-                        input_variables=["query", "option", "suggestion"],
-                        template = SSP_INSTRUCTION,
-                        )
-
+ssp_agent_prompt = PromptTemplate(
+    input_variables=["query", "option", "suggestion"],
+    template=SSP_INSTRUCTION,
+)
 
 SSP_INSTRUCTION_FEEDBACK = """
 You are a {persona}
@@ -165,10 +152,10 @@ Please do not refine the answer but give some insightful suggestions for the stu
 Suggestion:
 """
 
-ssp_feedback_agent_prompt= PromptTemplate(
-                        input_variables=["question", "answer", "persona"],
-                        template = SSP_INSTRUCTION_FEEDBACK,
-                        )
+ssp_feedback_agent_prompt = PromptTemplate(
+    input_variables=["question", "answer", "persona"],
+    template=SSP_INSTRUCTION_FEEDBACK,
+)
 
 SSP_INSTRUCTION_SELF_REFINE = """
 {question}
@@ -183,7 +170,7 @@ Now you can refine your answer with his answer to better answer the question. Yo
 Revised Answer:
 """
 
-ssp_self_refine_agent_prompt=PromptTemplate(
-                        input_variables=["question", "answer", "suggestion"],
-                        template = SSP_INSTRUCTION_SELF_REFINE,
-                        )
+ssp_self_refine_agent_prompt = PromptTemplate(
+    input_variables=["question", "answer", "suggestion"],
+    template=SSP_INSTRUCTION_SELF_REFINE,
+)
