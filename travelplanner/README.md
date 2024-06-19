@@ -20,25 +20,6 @@ pip install -r requirements.txt
 
 2. Download the [database](https://drive.google.com/file/d/1pF1Sw6pBmq2sFkJvm-LzJOqrmfWoQgxE/view?usp=drive_link) and unzip it to the `TravelPlanner` directory (i.e., `your/path/TravelPlanner`).
 
-## Running
-### Two-stage Mode
-
-In the two-stage mode, language agents are tasked to with employing various search tools to gather information.
-Based on the collected information, language agents are expected to deliver a plan that not only meet the user’s needs specified in the query but also adheres to commonsense constraints.
-
-```bash
-export OUTPUT_DIR=path/to/your/output/file
-# We support MODEL in ['gpt-3.5-turbo-X','gpt-4-1106-preview','gemini','mistral-7B-32K','mixtral']
-export MODEL_NAME=MODEL_NAME
-export OPENAI_API_KEY=YOUR_OPENAI_KEY
-# if you do not want to test google models, like gemini, just input "1".
-export GOOGLE_API_KEY=YOUR_GOOGLE_KEY
-# SET_TYPE in ['validation', 'test']
-export SET_TYPE=validation
-cd agents
-python tool_agents.py  --set_type $SET_TYPE --output_dir $OUTPUT_DIR --model_name $MODEL_NAME
-```
-The generated plan will be stored in OUTPUT_DIR/SET_TYPE.
 
 ### Sole-Planning Mode
 
