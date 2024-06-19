@@ -1,10 +1,10 @@
 
-<h1 align="center">EvoAgent: Towards Multi-Agent Generation via Evolutionary Algorithms</h1>
+<h1 align="center">EvoAgent: Towards Automatic Multi-Agent Generation via Evolutionary Algorithms</h1>
 
 ## What's New
 +  [2024.06.21] We release EvoAgent.
    + The code and datasets are available at [evoagent](https://github.com/siyuyuan/evoagent).
-   + The paper is available at [EvoAgent: Towards Multi-Agent Generation via Evolutionary Algorithms](https://arxiv.org/abs/XXX).
+   + The paper is available at [EvoAgent: Towards Automatic Multi-Agent Generation via Evolutionary Algorithms](https://arxiv.org/abs/XXX).
 
 ## EvoAgent
 
