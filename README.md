@@ -2,14 +2,14 @@
 <h1 align="center">EvoAgent: Towards Automatic Multi-Agent Generation via Evolutionary Algorithms</h1>
 <p align="center">
 [<a href="https://evo-agent.github.io/">Website</a>]
-[<a href="http://arxiv.org/abs/">Paper</a>] 
+[<a href="https://arxiv.org/pdf/2406.14228">Paper</a>] 
 
 </p>
 
 ## What's New
 +  [2024.06.21] We release EvoAgent.
    + The website is available at [EvoAgent](https://evo-agent.github.io/).
-   + The paper is available at [EvoAgent: Towards Automatic Multi-Agent Generation via Evolutionary Algorithms](https://arxiv.org/abs/XXX).
+   + The paper is available at [EvoAgent: Towards Automatic Multi-Agent Generation via Evolutionary Algorithms](https://arxiv.org/abs/2406.14228).
 
 ## EvoAgent
 
