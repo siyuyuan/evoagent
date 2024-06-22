@@ -153,3 +153,12 @@ python sole_planning.py  --set_type $SET_TYPE --output_dir $OUTPUT_DIR --model_n
 
 If you find this work useful in your method, you can cite the paper as below:
 
+```bash
+@misc{yuan2024evoagent,
+      title={EvoAgent: Towards Automatic Multi-Agent Generation via Evolutionary Algorithms}, 
+      author={Siyu Yuan and Kaitao Song and Jiangjie Chen and Xu Tan and Dongsheng Li and Deqing Yang},
+      year={2024},
+      eprint={2406.14228},
+      archivePrefix={arXiv},
+}
+```
