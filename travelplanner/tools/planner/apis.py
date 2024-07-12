@@ -83,7 +83,7 @@ class Refine_Planner:
             
         elif model_name in ['gemini']:
             self.llm = ChatGoogleGenerativeAI(temperature=0,model="gemini-pro",google_api_key=GOOGLE_API_KEY)
-                else:
+        else:
             self.llm = ChatOpenAI(model_name=model_name, temperature=0, max_tokens=4096, openai_api_key=OPENAI_API_KEY)
 
 
@@ -152,7 +152,7 @@ class Multi_Planner:
             
         elif model_name in ['gemini']:
             self.llm = ChatGoogleGenerativeAI(temperature=0,model="gemini-pro",google_api_key=GOOGLE_API_KEY)
-                else:
+        else:
             self.llm = ChatOpenAI(model_name=model_name, temperature=0, max_tokens=4096, openai_api_key=OPENAI_API_KEY)
 
 
@@ -218,7 +218,7 @@ class Meta_Planner:
             
         elif model_name in ['gemini']:
             self.llm = ChatGoogleGenerativeAI(temperature=0,model="gemini-pro",google_api_key=GOOGLE_API_KEY)
-                else:
+        else:
             self.llm = ChatOpenAI(model_name=model_name, temperature=0, max_tokens=4096, openai_api_key=OPENAI_API_KEY)
 
 
@@ -289,7 +289,7 @@ class Feedback_Planner:
             
         elif model_name in ['gemini']:
             self.llm = ChatGoogleGenerativeAI(temperature=0,model="gemini-pro",google_api_key=GOOGLE_API_KEY)
-                else:
+        else:
             self.llm = ChatOpenAI(model_name=model_name, temperature=0, max_tokens=4096, openai_api_key=OPENAI_API_KEY)
 
 
@@ -359,7 +359,7 @@ class Self_Refine_Planner:
             
         elif model_name in ['gemini']:
             self.llm = ChatGoogleGenerativeAI(temperature=0,model="gemini-pro",google_api_key=GOOGLE_API_KEY)
-                else:
+        else:
             self.llm = ChatOpenAI(model_name=model_name, temperature=0, max_tokens=4096, openai_api_key=OPENAI_API_KEY)
 
 
@@ -430,7 +430,7 @@ class Check_Planner:
             
         elif model_name in ['gemini']:
             self.llm = ChatGoogleGenerativeAI(temperature=0,model="gemini-pro",google_api_key=GOOGLE_API_KEY)
-                else:
+        else:
             self.llm = ChatOpenAI(model_name=model_name, temperature=0, max_tokens=4096, openai_api_key=OPENAI_API_KEY)
 
 
@@ -468,7 +468,7 @@ class Check_Planner:
             description_ls='\n'.join(temp),
             description=description
             )
-class SSP_Feedback_Planner:
+class SPP_Feedback_Planner:
     def __init__(self,
                  # args,
                  agent_prompt: PromptTemplate = planner_agent_prompt,
@@ -504,7 +504,7 @@ class SSP_Feedback_Planner:
             
         elif model_name in ['gemini']:
             self.llm = ChatGoogleGenerativeAI(temperature=0,model="gemini-pro",google_api_key=GOOGLE_API_KEY)
-                else:
+        else:
             self.llm = ChatOpenAI(model_name=model_name, temperature=0, max_tokens=4096, openai_api_key=OPENAI_API_KEY)
 
 
@@ -534,7 +534,7 @@ class SSP_Feedback_Planner:
             query=query,
             persona=persona,
             answer=answer)
-class SSP_Self_Refine_Planner:
+class SPP_Self_Refine_Planner:
     def __init__(self,
                  # args,
                  agent_prompt: PromptTemplate = planner_agent_prompt,
@@ -570,7 +570,7 @@ class SSP_Self_Refine_Planner:
             
         elif model_name in ['gemini']:
             self.llm = ChatGoogleGenerativeAI(temperature=0,model="gemini-pro",google_api_key=GOOGLE_API_KEY)
-                else:
+        else:
             self.llm = ChatOpenAI(model_name=model_name, temperature=0, max_tokens=4096, openai_api_key=OPENAI_API_KEY)
 
 
@@ -600,7 +600,7 @@ class SSP_Self_Refine_Planner:
             query=query,
             answer=answer,
             suggestion=suggestion)
-class SSP_Planner:
+class SPP_Planner:
     def __init__(self,
                  # args,
                  agent_prompt: PromptTemplate = planner_agent_prompt,
@@ -636,7 +636,7 @@ class SSP_Planner:
             
         elif model_name in ['gemini']:
             self.llm = ChatGoogleGenerativeAI(temperature=0,model="gemini-pro",google_api_key=GOOGLE_API_KEY)
-                else:
+        else:
             self.llm = ChatOpenAI(model_name=model_name, temperature=0, max_tokens=4096, openai_api_key=OPENAI_API_KEY)
 
 
@@ -701,7 +701,7 @@ class PK_Planner:
             
         elif model_name in ['gemini']:
             self.llm = ChatGoogleGenerativeAI(temperature=0,model="gemini-pro",google_api_key=GOOGLE_API_KEY)
-                else:
+        else:
             self.llm = ChatOpenAI(model_name=model_name, temperature=0, max_tokens=4096, openai_api_key=OPENAI_API_KEY)
 
 
@@ -769,7 +769,7 @@ class Planner:
             
         elif model_name in ['gemini']:
             self.llm = ChatGoogleGenerativeAI(temperature=0,model="gemini-pro",google_api_key=GOOGLE_API_KEY)
-                else:
+        else:
             self.llm = ChatOpenAI(model_name=model_name, temperature=0, max_tokens=4096, openai_api_key=OPENAI_API_KEY)
 
 
@@ -834,7 +834,7 @@ class All_Planner:
             
         elif model_name in ['gemini']:
             self.llm = ChatGoogleGenerativeAI(temperature=0,model="gemini-pro",google_api_key=GOOGLE_API_KEY)
-                else:
+        else:
             self.llm = ChatOpenAI(model_name=model_name, temperature=0, max_tokens=4096, openai_api_key=OPENAI_API_KEY)
 
 
@@ -904,7 +904,7 @@ class Select_Planner:
             
         elif model_name in ['gemini']:
             self.llm = ChatGoogleGenerativeAI(temperature=0,model="gemini-pro",google_api_key=GOOGLE_API_KEY)
-                else:
+        else:
             self.llm = ChatOpenAI(model_name=model_name, temperature=0, max_tokens=4096, openai_api_key=OPENAI_API_KEY)
 
 
@@ -970,7 +970,7 @@ class Overgen_Planner:
             
         elif model_name in ['gemini']:
             self.llm = ChatGoogleGenerativeAI(temperature=0,model="gemini-pro",google_api_key=GOOGLE_API_KEY)
-                else:
+        else:
             self.llm = ChatOpenAI(model_name=model_name, temperature=0, max_tokens=4096, openai_api_key=OPENAI_API_KEY)
 
 
@@ -1038,7 +1038,7 @@ class Suggestion_Generator:
             
         elif model_name in ['gemini']:
             self.llm = ChatGoogleGenerativeAI(temperature=0,model="gemini-pro",google_api_key=GOOGLE_API_KEY)
-                else:
+        else:
             self.llm = ChatOpenAI(model_name=model_name, temperature=0, max_tokens=4096, openai_api_key=OPENAI_API_KEY)
 
 

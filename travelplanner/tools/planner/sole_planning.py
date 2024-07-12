@@ -220,7 +220,7 @@ def overgen_func(ind, reference_information, query):
     return planner_list, planner_results
 
 
-def ssp_func(ind, reference_information, query):
+def spp_func(ind, reference_information, query):
     persona_gen = Persona_Generator(model_name=args.model_name, agent_prompt=persona_gen_agent_prompt)
     persona_ls = persona_gen.run(query)
     persona_ls = persona_ls.split(";")
@@ -230,8 +230,8 @@ def ssp_func(ind, reference_information, query):
         suggest = suggest_gen.run(reference_information, query, persona)
         suggest_inital.append(f"{persona.strip()}: {suggest.strip()}")
 
-    ssp_planner = SSP_Planner(model_name=args.model_name, agent_prompt=ssp_planner_agent_prompt)
-    planner_results = ssp_planner.run(reference_information, query, '\n'.join(suggest_inital))
+    spp_planner = SPP_Planner(model_name=args.model_name, agent_prompt=spp_planner_agent_prompt)
+    planner_results = spp_planner.run(reference_information, query, '\n'.join(suggest_inital))
     planner_list = []
     planner_list.append(
         {
@@ -244,18 +244,18 @@ def ssp_func(ind, reference_information, query):
     while i < ind:
         suggest_temp = []
         for persona in persona_ls:
-            ssp_feedback_planner = SSP_Feedback_Planner(model_name=args.model_name,
-                                                        agent_prompt=ssp_feedback_planner_agent_prompt)
-            ssp_feedback_description = ssp_feedback_planner.run(reference_information, query, planner_results, persona)
-            if ssp_feedback_description == "Well Done!":
+            spp_feedback_planner = SPP_Feedback_Planner(model_name=args.model_name,
+                                                        agent_prompt=spp_feedback_planner_agent_prompt)
+            spp_feedback_description = spp_feedback_planner.run(reference_information, query, planner_results, persona)
+            if spp_feedback_description == "Well Done!":
                 continue
             else:
-                suggest_temp.append(f"{persona.strip()}: {ssp_feedback_description.strip()}")
+                suggest_temp.append(f"{persona.strip()}: {spp_feedback_description.strip()}")
         if len(suggest_temp) == 0:
             break
-        ssp_self_refine_planner = SSP_Self_Refine_Planner(model_name=args.model_name,
-                                                          agent_prompt=ssp_self_refine_planner_agent_prompt)
-        new_planner_results = ssp_self_refine_planner.run(reference_information, query, planner_results,
+        spp_self_refine_planner = SPP_Self_Refine_Planner(model_name=args.model_name,
+                                                          agent_prompt=spp_self_refine_planner_agent_prompt)
+        new_planner_results = spp_self_refine_planner.run(reference_information, query, planner_results,
                                                           '\n'.join(suggest_temp))
 
         planner_list.append({
@@ -388,7 +388,7 @@ if __name__ == "__main__":
                     open(os.path.join(f'{args.output_dir}/{args.set_type}/generated_plan_{number}.json')))
 
             if args.rewrite == False:
-                if args.strategy in ['collaboration', 'refine', 'ssp', 'overgen', 'suggest', 'promptrefine']:
+                if args.strategy in ['collaboration', 'refine', 'spp', 'overgen', 'suggest', 'promptrefine']:
                     if f'{args.model_name}_{args.strategy}_{ind}_sole-planning_results' in result[-1]:
                         print(f"Do not write: {args.output_dir}/{args.set_type}/generated_plan_{number}.json")
                         # import pdb
@@ -440,9 +440,9 @@ if __name__ == "__main__":
                     refine_plan = planner.run(reference_information, query_data['query'])
                     planner_list, planner_results = suggest_func(ind, reference_information, query_data['query'],
                                                                  refine_plan)
-                elif args.strategy == 'ssp':
+                elif args.strategy == 'spp':
                     ind = args.ind
-                    planner_list, planner_results = ssp_func(ind, reference_information, query_data['query'])
+                    planner_list, planner_results = spp_func(ind, reference_information, query_data['query'])
                 elif args.strategy == 'overgen':
                     ind = args.ind
                     planner_list, planner_results = overgen_func(ind, reference_information, query_data['query'])
@@ -455,7 +455,7 @@ if __name__ == "__main__":
             if args.strategy in ['react', 'reflexion']:
                 result[-1][f'{args.model_name}_{args.strategy}_sole-planning_results_logs'] = scratchpad
             result[-1][f'{args.model_name}_{args.strategy}_sole-planning_results'] = planner_results
-            if args.strategy in ['collaboration', 'refine', 'ssp', 'overgen', 'suggest', 'promptrefine']:
+            if args.strategy in ['collaboration', 'refine', 'spp', 'overgen', 'suggest', 'promptrefine']:
                 result[-1][f'{args.model_name}_{args.strategy}_sole-planning_multi'] = planner_list
                 result[-1][f'{args.model_name}_{args.strategy}_{ind}_sole-planning_results'] = planner_results
             if args.strategy in ['group']:

@@ -23,15 +23,15 @@ More details are in the paper.
 
 ## Experiment
 
-### NLP and Multi-Modal Tasks: SSP and MMMU
+### NLP and Multi-Modal Tasks: SPP and MMMU
 To align previous experiences (e.g., Self-Refine and Solo Performance Prompting), we select three NLP knowledge-intensive and reasoning-intensive tasks, i.e., Logic Grid Puzzle, Trivia Creative Writing and Codenames Collaborative, and one multi-modal task, i.e., MMMU.
 
 #### Prerequisites
 
 Create a conda environment and install dependency:
 ```bash
-conda create -n ssp python=3.9
-conda activate ssp
+conda create -n spp python=3.9
+conda activate spp
 pip install -r requirements.txt
 ```
 
@@ -39,7 +39,7 @@ pip install -r requirements.txt
 
 - For NLP tasks:
 ```bash
-cd ssp/
+cd spp/
 # task in ['writing', 'logic', 'code']
 export task=writing
 # MODEL_NAME in ['gpt-4-X','gpt-3.5-turbo-X','llama-13b-chat']

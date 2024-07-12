@@ -42,7 +42,7 @@ suggest_gen_agent_prompt=PromptTemplate(
                         )
 
 
-SSP_PLANNER_INSTRUCTION= """
+SPP_PLANNER_INSTRUCTION= """
 You are a proficient planner. Based on the provided information and query, please give me a detailed plan, including specifics such as flight numbers (e.g., F0123456), restaurant names, and accommodation names. Note that all the information in your plan should be derived from the provided data. You must adhere to the format given in the example. Additionally, all details should align with commonsense. The symbol '-' indicates that information is unnecessary. For example, in the provided sample, you do not need to plan after returning to the departure city. When you travel to two cities in one day, you should note it in the 'Current City' section as in the example (i.e., from A to B).
 
 ***** Example *****
@@ -87,9 +87,9 @@ You can answer with these suggestions to better meet the query.
 Travel Plan:
 """
 
-ssp_planner_agent_prompt=PromptTemplate(
+spp_planner_agent_prompt=PromptTemplate(
                         input_variables=["text", "query", "suggestion"],
-                        template = SSP_PLANNER_INSTRUCTION,
+                        template = SPP_PLANNER_INSTRUCTION,
                         )
 
 
@@ -97,7 +97,7 @@ ssp_planner_agent_prompt=PromptTemplate(
 
 
 
-SSP_PLANNER_INSTRUCTION_FEEDBACK = """
+SPP_PLANNER_INSTRUCTION_FEEDBACK = """
 You are a {persona}
 Given information: {text}
 Query: {query}
@@ -107,12 +107,12 @@ Please do not refine the plan but give some insightful suggestions for the trave
 Suggestion:
 """
 
-ssp_feedback_planner_agent_prompt= PromptTemplate(
+spp_feedback_planner_agent_prompt= PromptTemplate(
                         input_variables=["text", "query", "answer", "persona"],
-                        template = SSP_PLANNER_INSTRUCTION_FEEDBACK,
+                        template = SPP_PLANNER_INSTRUCTION_FEEDBACK,
                         )
 
-SSP_PLANNER_INSTRUCTION_SELF_REFINE = """
+SPP_PLANNER_INSTRUCTION_SELF_REFINE = """
 You are a proficient planner. Based on the provided information and query, please give me a detailed plan, including specifics such as flight numbers (e.g., F0123456), restaurant names, and accommodation names. Note that all the information in your plan should be derived from the provided data. You must adhere to the format given in the example. Additionally, all details should align with commonsense. The symbol '-' indicates that information is unnecessary. For example, in the provided sample, you do not need to plan after returning to the departure city. When you travel to two cities in one day, you should note it in the 'Current City' section as in the example (i.e., from A to B).
 
 ***** Example *****
@@ -160,7 +160,7 @@ Now you can refine your answer with these suggestions to better meet the query. 
 Refined Travel Plan: 
 """
 
-ssp_self_refine_planner_agent_prompt=PromptTemplate(
+spp_self_refine_planner_agent_prompt=PromptTemplate(
                         input_variables=["text", "query", "answer", "suggestion"],
-                        template = SSP_PLANNER_INSTRUCTION_SELF_REFINE,
+                        template = SPP_PLANNER_INSTRUCTION_SELF_REFINE,
                         )

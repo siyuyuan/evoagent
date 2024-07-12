@@ -156,7 +156,7 @@ suggest_gen_agent_prompt = PromptTemplate(
     template=SUGGEST_GEN,
 )
 
-SSP_INSTRUCTION = """
+SPP_INSTRUCTION = """
 Question: 
 {query}
 {option}
@@ -168,12 +168,12 @@ You can answer with these suggestions to better meet the query. You need to give
 Answer:
 """
 
-ssp_agent_prompt = PromptTemplate(
+spp_agent_prompt = PromptTemplate(
     input_variables=["query", "option", "suggestion"],
-    template=SSP_INSTRUCTION,
+    template=SPP_INSTRUCTION,
 )
 
-SSP_INSTRUCTION_FEEDBACK = """
+SPP_INSTRUCTION_FEEDBACK = """
 You are a {persona}
 Question: 
 {query}
@@ -184,12 +184,12 @@ Please do not refine the answer but give some insightful suggestions for the stu
 Suggestion:
 """
 
-ssp_feedback_agent_prompt = PromptTemplate(
+spp_feedback_agent_prompt = PromptTemplate(
     input_variables=["query", "option", "answer", "persona"],
-    template=SSP_INSTRUCTION_FEEDBACK,
+    template=SPP_INSTRUCTION_FEEDBACK,
 )
 
-SSP_INSTRUCTION_SELF_REFINE = """
+SPP_INSTRUCTION_SELF_REFINE = """
 Question: 
 {query}
 {option}
@@ -204,7 +204,7 @@ Now you can refine your answer with this his suggestion to better answer the que
 Refined Answer: 
 """
 
-ssp_self_refine_agent_prompt = PromptTemplate(
+spp_self_refine_agent_prompt = PromptTemplate(
     input_variables=["query", "option", "answer", "suggestion"],
-    template=SSP_INSTRUCTION_SELF_REFINE,
+    template=SPP_INSTRUCTION_SELF_REFINE,
 )
