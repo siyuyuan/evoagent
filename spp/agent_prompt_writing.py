@@ -123,7 +123,7 @@ suggest_gen_agent_prompt = PromptTemplate(
     template=SUGGEST_GEN,
 )
 
-SSP_INSTRUCTION = """
+SPP_INSTRUCTION = """
 
 {question}
 
@@ -134,12 +134,12 @@ Now you can refine your writing result with his answer to better answer the ques
 Answer:
 """
 
-ssp_agent_prompt = PromptTemplate(
+spp_agent_prompt = PromptTemplate(
     input_variables=["query", "option", "suggestion"],
-    template=SSP_INSTRUCTION,
+    template=SPP_INSTRUCTION,
 )
 
-SSP_INSTRUCTION_FEEDBACK = """
+SPP_INSTRUCTION_FEEDBACK = """
 You are a {persona}
 
 {question}
@@ -149,12 +149,12 @@ Please do not refine the answer but give some insightful suggestions for the stu
 Suggestion:
 """
 
-ssp_feedback_agent_prompt = PromptTemplate(
+spp_feedback_agent_prompt = PromptTemplate(
     input_variables=["question", "answer", "persona"],
-    template=SSP_INSTRUCTION_FEEDBACK,
+    template=SPP_INSTRUCTION_FEEDBACK,
 )
 
-SSP_INSTRUCTION_SELF_REFINE = """
+SPP_INSTRUCTION_SELF_REFINE = """
 {question}
 
 This is your writing result:
@@ -167,7 +167,7 @@ Now you can refine your writing result with his answer to better answer the ques
 Revised Answer:
 """
 
-ssp_self_refine_agent_prompt = PromptTemplate(
+spp_self_refine_agent_prompt = PromptTemplate(
     input_variables=["question", "answer", "suggestion"],
-    template=SSP_INSTRUCTION_SELF_REFINE,
+    template=SPP_INSTRUCTION_SELF_REFINE,
 )

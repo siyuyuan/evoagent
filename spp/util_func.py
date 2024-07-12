@@ -84,7 +84,7 @@ def refine_func(ind, question, answer, model_name, data_type):
     return answer_list, answer
 
 
-def ssp_func(ind, question, answer, model_name, data_type):
+def spp_func(ind, question, answer, model_name, data_type):
     prompt = persona_gen_agent_prompt.format(question=question)
     messages = message_construction(model_name, prompt)
     persona_ls = evaluator_construction(messages, model_name, question, data_type)
@@ -97,7 +97,7 @@ def ssp_func(ind, question, answer, model_name, data_type):
         suggest = evaluator_construction(messages, model_name, question, data_type)
         suggest_inital.append(f"{persona.strip()}: {suggest.strip()}")
 
-    prompt = ssp_agent_prompt.format(question=question, suggestion='\n'.join(suggest_inital))
+    prompt = spp_agent_prompt.format(question=question, suggestion='\n'.join(suggest_inital))
     messages = message_construction(model_name, prompt)
     answer = evaluator_construction(messages, model_name, question, data_type)
     answer_list = []
@@ -112,17 +112,17 @@ def ssp_func(ind, question, answer, model_name, data_type):
     while i < ind:
         suggest_temp = []
         for persona in persona_ls:
-            prompt = ssp_feedback_agent_prompt.format(question=question, answer=answer, persona=persona)
+            prompt = spp_feedback_agent_prompt.format(question=question, answer=answer, persona=persona)
             messages = message_construction(model_name, prompt)
-            ssp_feedback_description = evaluator_construction(messages, model_name, question, data_type)
-            if ssp_feedback_description.strip() == "Well Done!":
+            spp_feedback_description = evaluator_construction(messages, model_name, question, data_type)
+            if spp_feedback_description.strip() == "Well Done!":
                 continue
             else:
-                suggest_temp.append(f"{persona.strip()}: {ssp_feedback_description.strip()}")
+                suggest_temp.append(f"{persona.strip()}: {spp_feedback_description.strip()}")
         if len(suggest_temp) == 0:
             # pdb.set_trace()
             break
-        prompt = ssp_self_refine_agent_prompt.format(question=question, answer=answer,
+        prompt = spp_self_refine_agent_prompt.format(question=question, answer=answer,
                                                      suggestion='\n'.join(suggest_temp))
         messages = message_construction(model_name, prompt)
         new_answer = evaluator_construction(messages, model_name, question, data_type)

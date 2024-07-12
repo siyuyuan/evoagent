@@ -76,9 +76,9 @@ if __name__ == "__main__":
             elif method == "refine":
                 clean_result = evaluator_construction(messages, model_name, prompt, data_type)
                 answer_list, answer = refine_func(args.ind, input_data, clean_result, model_name, data_type)
-            elif method == "ssp":
+            elif method == "spp":
                 clean_result = evaluator_construction(messages, model_name, prompt, data_type)
-                answer_list, answer = ssp_func(args.ind, input_data, clean_result, model_name, data_type)
+                answer_list, answer = spp_func(args.ind, input_data, clean_result, model_name, data_type)
             elif method == "direct":
                 clean_result = evaluator_construction(messages, model_name, prompt, data_type)
                 answer = clean_result
