@@ -66,7 +66,7 @@ if __name__ == "__main__":
                 prompt = f'''Write a short and coherent story about {topic} that incorporates the answers to the following {n} questions: \n{questions}\nAnswer:'''.strip()
                 input_data = f'''Write a short and coherent story about {topic} that incorporates the answers to the following {n} questions: \n{questions}\nAnswer:'''.strip()
             elif task_name == 'logic':
-                prompt = data["code"]
+                prompt = data["inputs"]
 
             messages = message_construction(model_name, prompt)
 
