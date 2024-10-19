@@ -105,12 +105,22 @@ def guess_collaboration_func(ind, n, question, answer, model_name, data_type):
     description_ls = []
     while i < ind:
         flag = 0
+        while True:
+            prompt = guess_meta_agent_prompt.format(question=question, answer=answer,
+                                                    description='\n-'.join(description_ls))
+            messages = message_construction(prompt, model_name)
+            description = evaluator_construction(messages, model_name, question, data_type)
 
-        prompt = guess_meta_agent_prompt.format(question=question, answer=answer,
-                                                description='\n-'.join(description_ls))
-        messages = message_construction(prompt, model_name)
-        description = evaluator_construction(messages, model_name, question, data_type)
-        description_ls.append(description)
+            prompt = check_agent_prompt.format(question=question, description_ls='\n-'.join(description_ls),
+                                               description=description)
+            messages = message_construction(model_name, prompt)
+            check_result = evaluator_construction(messages, model_name, question, data_type)
+            print(check_result)
+
+            if 'discard' not in check_result.lower() or flag > 3:
+                description_ls.append(description)
+                break
+            flag += 1
 
         prompt = guess_multi_agent_prompt.format(question=question, description=description, n=n)
         messages = message_construction(prompt, model_name)
@@ -141,11 +151,20 @@ def spy_collaboration_func(ind, question, answer, model_name, data_type):
     description_ls = []
     while i < ind:
         flag = 0
+        while True:
+            prompt = spy_meta_agent_prompt.format(question=question, answer=answer, description='\n-'.join(description_ls))
+            messages = message_construction(prompt, model_name)
+            description = evaluator_construction(messages, model_name, question, data_type)
 
-        prompt = spy_meta_agent_prompt.format(question=question, answer=answer, description='\n-'.join(description_ls))
-        messages = message_construction(prompt, model_name)
-        description = evaluator_construction(messages, model_name, question, data_type)
-        description_ls.append(description)
+            prompt = check_agent_prompt.format(question=question, description_ls='\n-'.join(description_ls),
+                                               description=description)
+            messages = message_construction(model_name, prompt)
+            check_result = evaluator_construction(messages, model_name, question, data_type)
+            print(check_result)
+            if 'discard' not in check_result.lower() or flag > 3:
+                description_ls.append(description)
+                break
+            flag += 1
 
         prompt = spy_multi_agent_prompt.format(question=question, description=description)
         messages = message_construction(prompt, model_name)
@@ -174,7 +193,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_name", type=str, default="gemini")
     parser.add_argument("--data_type", type=str, default="gemini")
-    parser.add_argument("--method", type=str, default="collaborate")
+    parser.add_argument("--method", type=str, default="evoagent")
     parser.add_argument("--start", type=int, default=0)
     parser.add_argument("--end", type=int, default=31)
     parser.add_argument("--ind", type=int, default=3)
@@ -207,7 +226,7 @@ Answer:
                     {"role": "user", "parts": [prompt]},
                 ]
 
-            if method == "collaborate":
+            if method == "evoagent":
                 clean_result = evaluator_construction(messages, model_name, prompt, data_type)
                 answer_list, answer = spy_collaboration_func(args.ind, prompt, clean_result, model_name, data_type)
             elif method == "refine":
@@ -239,7 +258,7 @@ Answer:
                     {"role": "user", "parts": [prompt]},
                 ]
 
-            if method == "collaborate":
+            if method == "evoagent":
                 clean_result = evaluator_construction(messages, model_name, prompt, data_type)
                 answer_list, answer = guess_collaboration_func(args.ind, n, prompt, clean_result, model_name, data_type)
             elif method == "refine":

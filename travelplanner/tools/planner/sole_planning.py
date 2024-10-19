@@ -67,7 +67,9 @@ def collaboration_func(ind, reference_information, query, planner_results):
         while True:
             meta_planner = Meta_Planner(model_name=args.model_name, agent_prompt=meta_planner_agent_prompt)
             description = meta_planner.run(reference_information, query, planner_results, '\n-'.join(description_ls))
-            check_result = "a"
+            check_planner = Check_Planner(model_name=args.model_name, agent_prompt=check_planner_agent_prompt)
+            check_result = check_planner.run(reference_information, query, description_ls, description)
+            print(check_result)
             if 'discard' not in check_result.lower() or flag > 3:
                 description_ls.append(description)
                 break
@@ -366,7 +368,7 @@ if __name__ == "__main__":
     elif args.strategy == 'reflexion':
         planner = ReactReflectPlanner(model_name=args.model_name, agent_prompt=react_reflect_planner_agent_prompt,
                                       reflect_prompt=reflect_prompt)
-    elif args.strategy == 'collaboration':
+    elif args.strategy == 'evoagent':
         planner = Planner(model_name=args.model_name, agent_prompt=planner_agent_prompt)
     elif args.strategy == 'refine':
         planner = Planner(model_name=args.model_name, agent_prompt=planner_agent_prompt)
@@ -388,7 +390,7 @@ if __name__ == "__main__":
                     open(os.path.join(f'{args.output_dir}/{args.set_type}/generated_plan_{number}.json')))
 
             if args.rewrite == False:
-                if args.strategy in ['collaboration', 'refine', 'spp', 'overgen', 'suggest', 'promptrefine']:
+                if args.strategy in ['evoagent', 'refine', 'spp', 'overgen', 'suggest', 'promptrefine']:
                     if f'{args.model_name}_{args.strategy}_{ind}_sole-planning_results' in result[-1]:
                         print(f"Do not write: {args.output_dir}/{args.set_type}/generated_plan_{number}.json")
                         # import pdb
@@ -413,7 +415,7 @@ if __name__ == "__main__":
             while True:
                 if args.strategy in ['react', 'reflexion']:
                     planner_results, scratchpad = planner.run(reference_information, query_data['query'])
-                elif args.strategy == 'collaboration':
+                elif args.strategy == 'evoagent':
                     ind = args.ind
                     refine_plan = planner.run(reference_information, query_data['query'])
                     planner_list, planner_results = collaboration_func(ind, reference_information, query_data['query'],
@@ -455,7 +457,7 @@ if __name__ == "__main__":
             if args.strategy in ['react', 'reflexion']:
                 result[-1][f'{args.model_name}_{args.strategy}_sole-planning_results_logs'] = scratchpad
             result[-1][f'{args.model_name}_{args.strategy}_sole-planning_results'] = planner_results
-            if args.strategy in ['collaboration', 'refine', 'spp', 'overgen', 'suggest', 'promptrefine']:
+            if args.strategy in ['evoagent', 'refine', 'spp', 'overgen', 'suggest', 'promptrefine']:
                 result[-1][f'{args.model_name}_{args.strategy}_sole-planning_multi'] = planner_list
                 result[-1][f'{args.model_name}_{args.strategy}_{ind}_sole-planning_results'] = planner_results
             if args.strategy in ['group']:

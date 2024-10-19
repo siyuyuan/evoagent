@@ -52,9 +52,9 @@ export OPENAI_API_KEY=YOUR_OPENAI_KEY
 # if you do not want to test google models, like gemini, just input "1".
 export GOOGLE_API_KEY=YOUR_GOOGLE_KEY
 # for Logic Grid Puzzle and Trivia Creative Writing
-python3 llm_collaborate.py --model_name $MODEL_NAME --data_type $DATA_TYPE --method collaborate --ind $IND
+python3 llm_evoagent.py --model_name $MODEL_NAME --data_type $DATA_TYPE --method evoagent --ind $IND
 # for Codenames Collaborative
-python3 llm_collaborate_codenames.py --model_name $MODEL_NAME --data_type $DATA_TYPE --method collaborate --ind $IND
+python3 llm_evoagent_codenames.py --model_name $MODEL_NAME --data_type $DATA_TYPE --method evoagent --ind $IND
 ```
 - For MMMU:
 ```bash
@@ -67,7 +67,7 @@ export OPENAI_API_KEY=YOUR_OPENAI_KEY
 # if you do not want to test google models, like gemini, just input "1".
 export GOOGLE_API_KEY=YOUR_GOOGLE_KEY
 
-python3 run_collaborate.py --model_name $MODEL_NAME --ind $IND
+python3 run_evoagent.py --model_name $MODEL_NAME --ind $IND
 ```
 ### Interactive Scientific Solving Simulation: ScienceWorld
 
@@ -99,7 +99,7 @@ export MODEL_NAME=MODEL_NAME
 
 for task in {0..29}
 do
-    python eval_collaboration.py \
+    python eval_evoagent.py \
         --task_nums $task \
         --output_path logs/$MODEL_NAME \
         --model_name $MODEL_NAME
@@ -139,9 +139,9 @@ export GROUP_NUM=3
 # SELECT_STRATEGY in ['random', 'all', 'pk']
 export SELECT_STRATEGY=all
 export SET_TYPE=validation
-# STRATEGY in ['direct','cot','react','collaboration','group'].
+# STRATEGY in ['direct','cot','react','evoagent','group'].
 # Collaboration is our method in the main result. Group is our methods in the ablation studies.
-export STRATEGY=collaboration
+export STRATEGY=evoagent
 
 cd tools/planner
 python sole_planning.py  --set_type $SET_TYPE --output_dir $OUTPUT_DIR --model_name $MODEL_NAME --strategy $STRATEGY --ind $IND --group_num $GROUP_NUM --select_strategy $SELECT_STRATEGY

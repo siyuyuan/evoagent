@@ -146,11 +146,20 @@ def collaboration_func(ind, question, answer, model_name, data_type):
     description_ls = []
     while i < ind:
         flag = 0
+        while True:
+            prompt = meta_agent_prompt.format(question=question, answer=answer, description='\n-'.join(description_ls))
+            messages = message_construction(model_name, prompt)
+            description = evaluator_construction(messages, model_name, question, data_type)
 
-        prompt = meta_agent_prompt.format(question=question, answer=answer, description='\n-'.join(description_ls))
-        messages = message_construction(model_name, prompt)
-        description = evaluator_construction(messages, model_name, question, data_type)
-        description_ls.append(description)
+            prompt = check_agent_prompt.format(question=question, description_ls='\n-'.join(description_ls), description=description)
+            messages = message_construction(model_name, prompt)
+            check_result = evaluator_construction(messages, model_name, question, data_type)
+            print(check_result)
+            if 'discard' not in check_result.lower() or flag > 3:
+                description_ls.append(description)
+                break
+            flag += 1
+
 
         prompt = multi_agent_prompt.format(question=question, description=description)
         messages = message_construction(model_name, prompt)

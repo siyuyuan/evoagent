@@ -20,7 +20,7 @@ export OPENAI_API_KEY=YOUR_OPENAI_KEY
 # if you do not want to test google models, like gemini, just input "1".
 export GOOGLE_API_KEY=YOUR_GOOGLE_KEY
 # for Logic Grid Puzzle and Trivia Creative Writing
-python3 llm_collaborate.py --model_name $MODEL_NAME --data_type $DATA_TYPE --method collaborate --ind $IND
+python3 llm_evoagent.py --model_name $MODEL_NAME --data_type $DATA_TYPE --method evoagent --ind $IND
 # for Codenames Collaborative
-python3 llm_collaborate_codenames.py --model_name $MODEL_NAME --data_type $DATA_TYPE --method collaborate --ind $IND
+python3 llm_evoagent_codenames.py --model_name $MODEL_NAME --data_type $DATA_TYPE --method evoagent --ind $IND
 ```

@@ -21,6 +21,27 @@ meta_agent_prompt = PromptTemplate(
     template=INSTRUCTION_META,
 )
 
+INSTRUCTION_CHECK = """
+{question}
+
+We employ mulitple experts to answer this query. The following is a second-person introduction to the experts we have hired:
+{description_ls}
+
+Now, we will hire a new expert to help better respond to user query. Here is a second person description of the new expert:
+{description}
+
+Since hiring new experts takes extra time and money, please evaluate the new expert based on the following two criteria to decide whether they should be retained or not:
+1. Based on the new expert's description, determine if they can effectively assist in answering users' questions.
+2. The new experts are unique and do not overlap with previously hired experts.
+The new expert must meet both of the above two criteria. If any of the criteria are not met, they should be discarded.
+Give the reason first and then give the choice. If retaining, please reply with: 'Retain'. If discarding, please reply with: 'Discard'."
+"""
+
+check_agent_prompt = PromptTemplate(
+    input_variables=["question", "description_ls", "description"],
+    template=INSTRUCTION_CHECK,
+)
+
 INSTRUCTION_MULTI = """
 {description}. 
 {question}

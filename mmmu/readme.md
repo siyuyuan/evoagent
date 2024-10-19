@@ -15,5 +15,5 @@ export OPENAI_API_KEY=YOUR_OPENAI_KEY
 # if you do not want to test google models, like gemini, just input "1".
 export GOOGLE_API_KEY=YOUR_GOOGLE_KEY
 
-python3 run_collaborate.py --model_name $MODEL_NAME --ind $IND
+python3 run_evoagent.py --model_name $MODEL_NAME --ind $IND
 ```

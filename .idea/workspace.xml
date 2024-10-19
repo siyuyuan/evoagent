@@ -6,6 +6,19 @@
   <component name="ChangeListManager">
     <list default="true" id="772eaac1-b8f2-45e8-8fe7-428126f2f799" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmmu/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/mmmu/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mmmu/run_collaborate.py" beforeDir="false" afterPath="$PROJECT_DIR$/mmmu/run_evoagent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scienceworld/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/scienceworld/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scienceworld/eval_collaboration.py" beforeDir="false" afterPath="$PROJECT_DIR$/scienceworld/eval_evoagent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spp/agent_prompt_code.py" beforeDir="false" afterPath="$PROJECT_DIR$/spp/agent_prompt_code.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spp/agent_prompt_logic.py" beforeDir="false" afterPath="$PROJECT_DIR$/spp/agent_prompt_logic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spp/agent_prompt_writing.py" beforeDir="false" afterPath="$PROJECT_DIR$/spp/agent_prompt_writing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spp/llm_collaborate.py" beforeDir="false" afterPath="$PROJECT_DIR$/spp/llm_evoagent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spp/llm_collaborate_codenames.py" beforeDir="false" afterPath="$PROJECT_DIR$/spp/llm_evoagent_codenames.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spp/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/spp/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spp/util_func.py" beforeDir="false" afterPath="$PROJECT_DIR$/spp/util_func.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/travelplanner/tools/planner/sole_planning.py" beforeDir="false" afterPath="$PROJECT_DIR$/travelplanner/tools/planner/sole_planning.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,20 +41,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "true",
-    "last_opened_file_path": "D:/test/Human_Analogy",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/test/evoagent&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -58,6 +71,8 @@
       <workItem from="1720748049790" duration="2409000" />
       <workItem from="1720968111119" duration="116000" />
       <workItem from="1726820032209" duration="398000" />
+      <workItem from="1728227884698" duration="1569000" />
+      <workItem from="1729303450580" duration="1105000" />
     </task>
     <servers />
   </component>

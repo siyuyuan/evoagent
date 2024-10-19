@@ -113,7 +113,7 @@ if __name__ == "__main__":
                 continue
         total_files = len(sub_dataset_val)
         print(f"Total Files: {total_files}")
-        progress_file = f"output_collaborate/result_{model_name}_{cla}_collaborate.txt"
+        progress_file = f"output_evoagent/result_{model_name}_{cla}_evoagent.txt"
         start_index = get_last_processed_index(progress_file)
         dic = []
         ind = args.ind

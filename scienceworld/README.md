@@ -12,7 +12,7 @@ export MODEL_NAME=MODEL_NAME
 
 for task in {0..29}
 do
-    python eval_collaboration.py \
+    python eval_evoagent.py \
         --task_nums $task \
         --output_path logs/$MODEL_NAME \
         --model_name $MODEL_NAME
